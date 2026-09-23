@@ -90,13 +90,12 @@ export default function ProductFilters({
                 key={cat.slug}
                 type="button"
                 onClick={() => onCategoryChange(cat.slug)}
-                className={`px-3 py-1.5 rounded-full text-xs font-medium shrink-0 transition-all flex items-center gap-1.5 cursor-pointer ${
+                className={`px-3.5 py-1.5 rounded-full text-xs font-medium shrink-0 transition-all cursor-pointer ${
                   isActive
                     ? 'bg-[#141413] text-[#ffffff] shadow-xs'
                     : 'bg-[#ffffff] text-[#6e6d67] hover:text-[#141413] hover:bg-[#f2f1ed] border border-[#e2e0da]'
                 }`}
               >
-                {isActive && <span className="h-1.5 w-1.5 rounded-full bg-[#059669]" />}
                 <span>{cat.label}</span>
               </button>
             );

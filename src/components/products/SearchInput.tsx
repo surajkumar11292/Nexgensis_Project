@@ -19,7 +19,6 @@ export default function SearchInput({
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   // Sync internal state when external initialValue changes (e.g. from Clear Filters or URL navigation)
-  // Official React pattern for adjusting state from props during render without synchronous useEffect setState
   if (initialValue !== prevInitialValue) {
     setPrevInitialValue(initialValue);
     setSearchTerm(initialValue);
@@ -39,7 +38,17 @@ export default function SearchInput({
     }, 400);
   };
 
-  // Immediate clear on X click: cancels timer, clears local state, and immediately clears URL
+  // Immediate search on button click or form submit
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+      timerRef.current = null;
+    }
+    onSearchChange(searchTerm.trim());
+  };
+
+  // Immediate clear on X click: cancels timer, clears local state, and immediately updates URL
   const handleClear = () => {
     if (timerRef.current) {
       clearTimeout(timerRef.current);
@@ -60,29 +69,43 @@ export default function SearchInput({
   }, []);
 
   return (
-    <div className="relative flex-1 max-w-md">
-      <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#8e8d86]">
-        <Search className="h-3.5 w-3.5" />
-      </div>
+    <form
+      onSubmit={handleSubmit}
+      role="search"
+      className="relative flex-1 max-w-md h-9 flex items-center bg-[#ffffff] rounded-full border border-[#d2d0c7] shadow-[0_2px_8px_rgba(0,0,0,0.06)] hover:border-[#b8b5aa] focus-within:border-[#141413] focus-within:ring-1 focus-within:ring-[#141413] transition-all"
+    >
       <input
         type="text"
         value={searchTerm}
         onChange={handleChange}
         placeholder={placeholder}
         aria-label="Search products"
-        className="w-full pl-9 pr-9 py-2 rounded-full text-xs bg-[#ffffff] text-[#141413] placeholder:text-[#9c9b94] border border-[#e2e0da] focus:outline-none focus:ring-1 focus:ring-[#141413] focus:border-[#141413] transition-colors shadow-2xs"
+        className="w-full h-full pl-4 pr-16 bg-transparent text-xs font-medium text-[#141413] placeholder:text-[#787771] focus:outline-none rounded-full"
       />
-      {searchTerm && (
+
+      <div className="absolute inset-y-0 right-2 flex items-center gap-1">
+        {searchTerm && (
+          <button
+            type="button"
+            onClick={handleClear}
+            title="Clear search"
+            aria-label="Clear search query"
+            className="p-1 text-[#8e8d86] hover:text-[#141413] cursor-pointer transition-colors"
+          >
+            <X className="h-3.5 w-3.5" />
+          </button>
+        )}
+
+        {/* Clean search icon button: no background fill, no border, just the icon */}
         <button
-          type="button"
-          onClick={handleClear}
-          title="Clear search"
-          aria-label="Clear search query"
-          className="absolute inset-y-0 right-0 pr-3 flex items-center text-[#8e8d86] hover:text-[#141413] cursor-pointer"
+          type="submit"
+          title="Search"
+          aria-label="Search"
+          className="p-1 text-[#141413] hover:text-[#5a5954] cursor-pointer transition-colors flex items-center justify-center"
         >
-          <X className="h-3.5 w-3.5" />
+          <Search className="h-4 w-4" />
         </button>
-      )}
-    </div>
+      </div>
+    </form>
   );
 }

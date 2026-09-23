@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import Header from '@/components/layout/Header';
 import { Loader2 } from 'lucide-react';
@@ -13,6 +13,7 @@ export default function DashboardLayout({
 }) {
   const { isAuthenticated, isLoading } = useAuth();
   const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
@@ -39,10 +40,17 @@ export default function DashboardLayout({
     return null;
   }
 
+  // Only show main header on catalog view; hide top section after entering product detail
+  const isProductDetailPage = pathname.startsWith('/products/') && pathname !== '/products';
+
   return (
     <div className="min-h-screen flex flex-col bg-[#f9f9f8]">
-      <Header />
-      <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-2.5 pb-6">
+      {!isProductDetailPage && <Header />}
+      <main
+        className={`flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8 ${
+          isProductDetailPage ? 'pt-6 sm:pt-8' : 'pt-2.5'
+        }`}
+      >
         {children}
       </main>
     </div>

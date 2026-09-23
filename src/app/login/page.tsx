@@ -77,99 +77,69 @@ export default function LoginPage() {
 
   return (
     <main className="min-h-screen grid grid-cols-1 lg:grid-cols-12 bg-[#f9f9f8]">
-      {/* Left Column: Clean Institutional Branding */}
-      <section className="hidden lg:flex lg:col-span-5 xl:col-span-6 bg-[#141413] text-white p-12 xl:p-16 flex-col justify-between relative border-r border-[#262624]">
-        {/* Brand */}
-        <div className="flex items-center gap-3">
-          <div className="h-9 w-9 rounded-xl bg-[#262624] border border-[#383733] flex items-center justify-center text-white font-bold text-sm">
-            N
-          </div>
-          <div>
-            <span className="text-sm font-bold tracking-wider uppercase text-white block">
-              Nexgensis
-            </span>
-            <span className="text-2xs text-[#a3a199] block">
-              Product Admin Dashboard
-            </span>
-          </div>
-        </div>
-
+      {/* Left Column: Clean Workspace Overview */}
+      <section className="hidden lg:flex lg:col-span-5 xl:col-span-6 bg-[#141413] text-white p-12 xl:p-16 flex-col justify-center relative border-r border-[#262624]">
         {/* Core Value Statement */}
-        <div className="space-y-6 my-auto max-w-md py-12">
+        <div className="space-y-6 max-w-md">
           <div className="space-y-2">
-            <h1 className="text-3xl xl:text-4xl font-normal tracking-[-0.03em] text-[#fbfbfa] leading-tight">
-              Product catalog, organized.
+            <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-[#fbfbfa] leading-tight">
+              Product catalog
             </h1>
-            <p className="text-xs text-[#a3a199] leading-relaxed">
+            <p className="text-xs sm:text-sm text-[#a3a199] leading-relaxed">
               A clean administrative workspace to manage inventory, track stock levels, and review catalog updates in real time.
             </p>
           </div>
 
-          {/* Feature List with Unified Monochromatic Styling (No AI Color Palette) */}
-          <div className="space-y-4 pt-2 text-xs text-[#a3a199]">
+          {/* Feature List */}
+          <div className="space-y-4 pt-1">
             <div className="flex items-start gap-3">
-              <div className="h-6 w-6 rounded-lg bg-[#222220] border border-[#383733] flex items-center justify-center shrink-0 text-[#e7e6e1] mt-0.5">
+              <div className="h-7 w-7 rounded-lg bg-[#222220] border border-[#383733] flex items-center justify-center shrink-0 text-[#e7e6e1] mt-0.5">
                 <Search className="h-3.5 w-3.5" />
               </div>
-              <div>
-                <strong className="text-white font-medium block text-xs">
+              <div className="space-y-0.5">
+                <strong className="text-white font-medium block text-xs sm:text-sm">
                   Fast search &amp; filters
                 </strong>
-                <span className="text-2xs text-[#a3a199]">
-                  Filter by category, search by title, and sort with instant URL state sync.
+                <span className="text-2xs sm:text-xs text-[#a3a199] leading-relaxed block">
+                  Filter by category, search by title, and sort products instantly.
                 </span>
               </div>
             </div>
 
             <div className="flex items-start gap-3">
-              <div className="h-6 w-6 rounded-lg bg-[#222220] border border-[#383733] flex items-center justify-center shrink-0 text-[#e7e6e1] mt-0.5">
+              <div className="h-7 w-7 rounded-lg bg-[#222220] border border-[#383733] flex items-center justify-center shrink-0 text-[#e7e6e1] mt-0.5">
                 <Package className="h-3.5 w-3.5" />
               </div>
-              <div>
-                <strong className="text-white font-medium block text-xs">
+              <div className="space-y-0.5">
+                <strong className="text-white font-medium block text-xs sm:text-sm">
                   Inventory &amp; stock overview
                 </strong>
-                <span className="text-2xs text-[#a3a199]">
+                <span className="text-2xs sm:text-xs text-[#a3a199] leading-relaxed block">
                   Monitor availability, pricing, discount percentages, and customer reviews.
                 </span>
               </div>
             </div>
 
             <div className="flex items-start gap-3">
-              <div className="h-6 w-6 rounded-lg bg-[#222220] border border-[#383733] flex items-center justify-center shrink-0 text-[#e7e6e1] mt-0.5">
+              <div className="h-7 w-7 rounded-lg bg-[#222220] border border-[#383733] flex items-center justify-center shrink-0 text-[#e7e6e1] mt-0.5">
                 <Database className="h-3.5 w-3.5" />
               </div>
-              <div>
-                <strong className="text-white font-medium block text-xs">
+              <div className="space-y-0.5">
+                <strong className="text-white font-medium block text-xs sm:text-sm">
                   Catalog management
                 </strong>
-                <span className="text-2xs text-[#a3a199]">
-                  Add, update, or remove products with local persistence.
+                <span className="text-2xs sm:text-xs text-[#a3a199] leading-relaxed block">
+                  Add, update, or remove products seamlessly in your catalog.
                 </span>
               </div>
             </div>
           </div>
-        </div>
-
-        {/* Footer */}
-        <div className="text-2xs text-[#a3a199]">
-          <span>Nexgensis Technologies · Product Management Assignment</span>
         </div>
       </section>
 
       {/* Right Column: Clean Login Panel */}
       <section className="col-span-1 lg:col-span-7 xl:col-span-6 flex flex-col justify-center px-6 sm:px-12 xl:px-20 py-12">
         <div className="w-full max-w-sm mx-auto space-y-6">
-          {/* Mobile brand header */}
-          <div className="lg:hidden flex items-center gap-2.5 mb-4">
-            <div className="h-8 w-8 rounded-lg bg-[#141413] flex items-center justify-center text-white font-bold text-sm">
-              N
-            </div>
-            <span className="text-sm font-bold tracking-tight text-[#141413] uppercase">
-              Nexgensis Admin
-            </span>
-          </div>
-
           <div className="space-y-1.5">
             <h2 className="text-2xl font-normal tracking-[-0.02em] text-[#141413]">
               Sign in
@@ -177,20 +147,6 @@ export default function LoginPage() {
             <p className="text-xs text-[#5a5954]">
               Enter your credentials to access the product catalog.
             </p>
-          </div>
-
-          {/* Discreet Demo Autofill Helper */}
-          <div className="p-3 rounded-xl bg-[#ffffff] border border-[#e7e6e1] shadow-2xs flex items-center justify-between gap-3 text-xs">
-            <div className="text-2xs text-[#454440]">
-              <span>Demo: <strong className="text-[#141413] font-mono">emilys</strong> / <strong className="text-[#141413] font-mono">emilyspass</strong></span>
-            </div>
-            <button
-              type="button"
-              onClick={fillDemoCredentials}
-              className="text-2xs font-semibold text-[#141413] hover:text-[#d97706] hover:underline underline-offset-2 transition-colors cursor-pointer"
-            >
-              Autofill
-            </button>
           </div>
 
           {/* Error Message */}
@@ -291,9 +247,18 @@ export default function LoginPage() {
             </div>
           </form>
 
-          {/* High-Contrast Footer Note (Fixes LOW CONTRAST TEXT flag) */}
-          <div className="pt-4 border-t border-[#e7e6e1] text-center text-2xs font-medium text-[#454440]">
-            DummyJSON Authentication API · Next.js 16
+          {/* Discreet Demo Autofill Helper with Blue CTA */}
+          <div className="p-3 rounded-xl bg-[#ffffff] border border-[#e7e6e1] shadow-2xs flex items-center justify-between gap-3 text-xs">
+            <div className="text-2xs text-[#454440]">
+              <span>Demo: <strong className="text-[#141413] font-mono">emilys</strong> / <strong className="text-[#141413] font-mono">emilyspass</strong></span>
+            </div>
+            <button
+              type="button"
+              onClick={fillDemoCredentials}
+              className="text-xs font-semibold text-[#2563eb] hover:text-[#1d4ed8] bg-[#eff6ff] hover:bg-[#dbeafe] border border-[#bfdbfe] px-2.5 py-1 rounded-lg transition-all cursor-pointer shadow-2xs active:scale-95"
+            >
+              Autofill
+            </button>
           </div>
         </div>
       </section>

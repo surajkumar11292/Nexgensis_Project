@@ -332,11 +332,11 @@ function ProductFormDialog({
           <div className="space-y-1">
             <label className="text-xs font-semibold text-[#141413]">Description</label>
             <textarea
-              rows={2}
+              rows={3}
               value={formData.description || ''}
               onChange={(e) => setFormData((prev) => ({ ...prev, description: e.target.value }))}
               placeholder="Provide a detailed description of the product features..."
-              className="w-full px-3 py-1.5 rounded-xl text-xs bg-[#ffffff] text-[#141413] border border-[#e2e0da] focus:outline-none focus:ring-1 focus:ring-[#141413] transition-colors resize-none leading-relaxed h-14"
+              className="w-full px-3 py-2 rounded-xl text-xs bg-[#ffffff] text-[#141413] border border-[#e2e0da] focus:outline-none focus:ring-1 focus:ring-[#141413] transition-colors resize-none leading-relaxed h-[5.25rem] overflow-y-auto modal-scroll"
             />
           </div>
         </form>

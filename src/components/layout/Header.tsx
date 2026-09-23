@@ -56,11 +56,8 @@ export default function Header() {
             <h1 className="text-xl sm:text-2xl font-bold tracking-[-0.02em] text-[#141413] leading-none">
               Products
             </h1>
-            <span className="inline-flex items-center gap-1.5 text-xs text-[#5a5954] mt-1.5 leading-none">
-              <span className="inline-block h-1.5 w-1.5 rounded-full bg-[#059669]" />
-              <span>
-                <strong className="font-semibold text-[#141413] tabular-nums">{catalogTotal}</strong> in catalog
-              </span>
+            <span className="text-xs text-[#5a5954] mt-1.5 leading-none">
+              <strong className="font-semibold text-[#141413] tabular-nums">{catalogTotal}</strong> in catalog
             </span>
           </Link>
 
@@ -85,7 +82,7 @@ export default function Header() {
             <button
               type="button"
               onClick={handleOpenAdd}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full text-xs font-semibold bg-[#141413] hover:bg-[#262624] text-white transition-all cursor-pointer shadow-xs active:scale-95 shrink-0"
+              className="inline-flex items-center gap-1.5 px-3.5 h-9 rounded-full text-xs font-semibold bg-[#141413] hover:bg-[#262624] text-white transition-all cursor-pointer shadow-xs active:scale-95 shrink-0"
             >
               <Plus className="h-3.5 w-3.5" />
               <span className="hidden sm:inline">Add Product</span>
