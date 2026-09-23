@@ -1,13 +1,25 @@
 @import "tailwindcss";
 
 :root {
-  --background: #fafafa;
-  --foreground: #18181b;
+  --background: #f9f9f8;
+  --foreground: #141413;
+  --surface: #ffffff;
+  --border: #e7e6e1;
+  --border-subtle: #f0eee9;
+  --ink-muted: #6e6d67;
+  --kinpaku-gold: #d97706;
+  --verdigris: #059669;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-border: var(--border);
+  --color-border-subtle: var(--border-subtle);
+  --color-muted: var(--ink-muted);
+  --color-gold: var(--kinpaku-gold);
+  --color-verdigris: var(--verdigris);
   --font-sans: var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-mono: var(--font-geist-mono), monospace;
 }
@@ -19,15 +31,37 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Tabular numbers for price and metric alignments */
+/* Ensure all interactive elements show pointer cursor */
+button,
+[role="button"],
+a,
+select {
+  cursor: pointer;
+}
+
+button:disabled,
+[aria-disabled="true"] {
+  cursor: not-allowed;
+}
+
+/* Tabular numerals for price, ratings, and metrics alignment */
 .tabular-nums {
   font-variant-numeric: tabular-nums;
 }
 
-/* Subtle, polished custom scrollbars */
+/* Hide Next.js dev overlay indicator badge completely */
+nextjs-portal,
+[data-nextjs-toast],
+[data-nextjs-dialog-overlay],
+div[data-nextjs-dev-tools],
+#next-dev-tools {
+  display: none !important;
+}
+
+/* Smooth subtle scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 
 ::-webkit-scrollbar-track {
@@ -35,10 +69,10 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #d4d4d8;
+  background: #dcdad4;
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #a1a1aa;
+  background: #b5b3aa;
 }

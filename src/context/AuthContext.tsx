@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useEffect, useState, useCallback, useSyncExternalStore } from 'react';
+import React, { createContext, useContext, useEffect, useState, useCallback, startTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { AuthContextType, LoginCredentials, User } from '@/types/auth';
 import authService from '@/services/authService';
@@ -8,35 +8,32 @@ import { AUTH_UNAUTHORIZED_EVENT } from '@/services/api';
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// Helper for hydration-safe client-side check
-const emptySubscribe = () => () => {};
-const getIsClient = () => true;
-const getIsServer = () => false;
-
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const isClient = useSyncExternalStore(emptySubscribe, getIsClient, getIsServer);
   const router = useRouter();
-
-  const [user, setUser] = useState<User | null>(() => {
-    if (typeof window !== 'undefined') {
-      return authService.getStoredAuth().user;
-    }
-    return null;
-  });
-
-  const [token, setToken] = useState<string | null>(() => {
-    if (typeof window !== 'undefined') {
-      return authService.getStoredAuth().token;
-    }
-    return null;
-  });
+  const [user, setUser] = useState<User | null>(null);
+  const [token, setToken] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const logout = useCallback(() => {
     authService.logout();
-    setUser(null);
-    setToken(null);
+    startTransition(() => {
+      setUser(null);
+      setToken(null);
+    });
     router.push('/login');
   }, [router]);
+
+  // Hydrate session strictly on client mount via startTransition to eliminate React Hydration Mismatch
+  useEffect(() => {
+    const { user: storedUser, token: storedToken } = authService.getStoredAuth();
+    startTransition(() => {
+      if (storedToken && storedUser) {
+        setUser(storedUser);
+        setToken(storedToken);
+      }
+      setIsLoading(false);
+    });
+  }, []);
 
   // Listen to 401 unauthorized events dispatched by Axios interceptor
   useEffect(() => {
@@ -62,8 +59,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         gender: data.gender,
         image: data.image,
       };
-      setUser(authenticatedUser);
-      setToken(data.accessToken);
+      startTransition(() => {
+        setUser(authenticatedUser);
+        setToken(data.accessToken);
+      });
       router.push('/products');
     },
     [router]
@@ -74,7 +73,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       value={{
         user,
         token,
-        isLoading: !isClient,
+        isLoading,
         isAuthenticated: !!token,
         login,
         logout,
