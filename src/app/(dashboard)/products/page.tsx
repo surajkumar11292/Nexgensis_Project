@@ -8,7 +8,6 @@ import { useProductStorage } from '@/context/ProductStorageContext';
 import { useToast } from '@/context/ToastContext';
 import productService from '@/services/productService';
 import { Product, ProductFormData } from '@/types/product';
-import SearchInput from '@/components/products/SearchInput';
 import ProductFilters from '@/components/products/ProductFilters';
 import ProductTable from '@/components/products/ProductTable';
 import ProductCardGrid from '@/components/products/ProductCardGrid';
@@ -18,15 +17,23 @@ import EmptyState from '@/components/products/EmptyState';
 import ErrorState from '@/components/products/ErrorState';
 import ProductFormModal from '@/components/products/ProductFormModal';
 import ConfirmDeleteModal from '@/components/products/ConfirmDeleteModal';
-import { RotateCcw, Sparkles, Loader2, Plus } from 'lucide-react';
+import { Sparkles, Loader2 } from 'lucide-react';
 
 function ProductsContent() {
   const router = useRouter();
   const { params, setPage, setLimit, setSearch, setCategory, setSort, clearFilters } =
     useUrlParams();
   const { products, total, isLoading, error, retry, isHybridFiltered } = useProducts(params);
-  const { hasLocalChanges, resetToDefaults, saveLocalAdd, saveLocalUpdate, saveLocalDelete, setCatalogTotal } =
-    useProductStorage();
+  const {
+    hasLocalChanges,
+    resetToDefaults,
+    saveLocalAdd,
+    saveLocalUpdate,
+    saveLocalDelete,
+    setCatalogTotal,
+    isAddModalOpen,
+    setIsAddModalOpen,
+  } = useProductStorage();
   const { success, error: toastError } = useToast();
 
   useEffect(() => {
@@ -35,10 +42,44 @@ function ProductsContent() {
     }
   }, [total, params.q, params.category, setCatalogTotal]);
 
+  // Restore scroll position to last-viewed product on return navigation
+  useEffect(() => {
+    if (!isLoading && products.length > 0 && typeof window !== 'undefined') {
+      const lastId = sessionStorage.getItem('last_viewed_product_id');
+      const savedPos = sessionStorage.getItem('products_scroll_pos');
+
+      if (lastId || savedPos) {
+        const timer = setTimeout(() => {
+          let restored = false;
+          if (lastId) {
+            const targetEl =
+              document.getElementById(`product-row-${lastId}`) ||
+              document.getElementById(`product-card-${lastId}`);
+            if (targetEl) {
+              targetEl.scrollIntoView({ behavior: 'instant', block: 'center' });
+              targetEl.classList.add('bg-[#fef9c3]/70', 'transition-colors', 'duration-700');
+              setTimeout(() => {
+                targetEl.classList.remove('bg-[#fef9c3]/70');
+              }, 1800);
+              restored = true;
+            }
+          }
+          if (!restored && savedPos) {
+            window.scrollTo({ top: parseInt(savedPos, 10), behavior: 'instant' });
+          }
+
+          sessionStorage.removeItem('last_viewed_product_id');
+          sessionStorage.removeItem('products_scroll_pos');
+        }, 60);
+
+        return () => clearTimeout(timer);
+      }
+    }
+  }, [isLoading, products]);
+
   const [desktopViewMode, setDesktopViewMode] = useState<'table' | 'cards'>('table');
 
   // Modal States
-  const [isAddModalOpen, setIsAddModalOpen] = useState<boolean>(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
@@ -48,6 +89,11 @@ function ProductsContent() {
   const hasActiveFilters = Boolean(params.q || params.category || params.sortBy);
 
   const handleViewProduct = (productId: number) => {
+    if (typeof window !== 'undefined') {
+      sessionStorage.setItem('products_scroll_pos', window.scrollY.toString());
+      sessionStorage.setItem('last_viewed_product_id', productId.toString());
+      sessionStorage.setItem('products_return_url', window.location.pathname + window.location.search);
+    }
     router.push(`/products/${productId}`);
   };
 
@@ -143,7 +189,7 @@ function ProductsContent() {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
       {/* Hybrid Filter Warning Notice */}
       {isHybridFiltered && (
         <div className="p-3.5 rounded-2xl bg-[#fffbf2] border border-[#f5e6c8] text-[#8a5b14] text-xs flex items-start gap-3 shadow-2xs">
@@ -154,51 +200,8 @@ function ProductsContent() {
         </div>
       )}
 
-      {/* Control Strip: Search & Filters */}
-      <div className="p-3 sm:p-4 rounded-2xl bg-[#f2f1ed] border border-[#e5e4de] space-y-3.5 shadow-2xs">
-        {/* Search Bar Row with Add Product on Left of Page Indicator */}
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
-          <SearchInput
-            initialValue={params.q || ''}
-            onSearchChange={setSearch}
-            placeholder="Search catalog by title, brand, or keywords..."
-          />
-
-          {/* Right Controls: Reset Demo, Add Product (left of page indicator), and Page indicator */}
-          <div className="flex items-center justify-between sm:justify-end gap-3 shrink-0">
-            {hasLocalChanges && (
-              <button
-                type="button"
-                onClick={resetToDefaults}
-                title="Reset demo changes"
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium text-[#b45309] bg-[#fffbeb] hover:bg-[#fef3c7] border border-[#fde68a] transition-all cursor-pointer shadow-2xs active:scale-95"
-              >
-                <RotateCcw className="h-3 w-3" />
-                <span className="hidden sm:inline">Reset Demo</span>
-              </button>
-            )}
-
-            {/* Add Product Button (positioned left of Page indicator) */}
-            <button
-              type="button"
-              onClick={() => setIsAddModalOpen(true)}
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-[#141413] hover:bg-[#262624] text-white transition-all cursor-pointer shadow-xs active:scale-95 shrink-0"
-            >
-              <Plus className="h-3.5 w-3.5" />
-              <span>Add Product</span>
-            </button>
-
-            {/* High-contrast page indicator */}
-            <div className="text-2xs sm:text-xs font-medium text-[#383733] shrink-0">
-              Page <span className="font-semibold text-[#141413] tabular-nums">{params.page}</span> of{' '}
-              <span className="font-semibold text-[#141413] tabular-nums">
-                {Math.max(1, Math.ceil(total / params.limit))}
-              </span>
-            </div>
-          </div>
-        </div>
-
-        {/* Filter Controls Row */}
+      {/* Compact Filter Strip: Categories (Left) & Page Indicator + Sort + View Mode (Right) */}
+      <div className="p-2 sm:p-2.5 rounded-2xl bg-[#f2f1ed] border border-[#e5e4de] shadow-2xs">
         <ProductFilters
           selectedCategory={params.category || ''}
           sortBy={params.sortBy || ''}
@@ -209,6 +212,8 @@ function ProductsContent() {
           hasActiveFilters={hasActiveFilters}
           viewMode={desktopViewMode}
           onViewModeChange={setDesktopViewMode}
+          currentPage={params.page}
+          totalPages={Math.max(1, Math.ceil(total / params.limit))}
         />
       </div>
 

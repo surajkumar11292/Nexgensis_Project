@@ -15,6 +15,8 @@ interface ProductFiltersProps {
   hasActiveFilters: boolean;
   viewMode?: 'table' | 'cards';
   onViewModeChange?: (mode: 'table' | 'cards') => void;
+  currentPage?: number;
+  totalPages?: number;
 }
 
 export default function ProductFilters({
@@ -27,6 +29,8 @@ export default function ProductFilters({
   hasActiveFilters,
   viewMode = 'table',
   onViewModeChange,
+  currentPage,
+  totalPages,
 }: ProductFiltersProps) {
   const [categories, setCategories] = useState<ProductCategory[]>([]);
   const [isLoadingCategories, setIsLoadingCategories] = useState<boolean>(true);
@@ -119,7 +123,15 @@ export default function ProductFilters({
       </div>
 
       {/* Sort, View Mode, and Clear Filters */}
-      <div className="flex items-center gap-2 flex-wrap justify-between lg:justify-end">
+      <div className="flex items-center gap-2 sm:gap-2.5 flex-wrap justify-between lg:justify-end">
+        {/* Page Indicator (on left side of Sort) */}
+        {typeof currentPage === 'number' && typeof totalPages === 'number' && (
+          <div className="text-2xs sm:text-xs font-medium text-[#5a5954] shrink-0 mr-1">
+            Page <strong className="font-semibold text-[#141413] tabular-nums">{currentPage}</strong> of{' '}
+            <strong className="font-semibold text-[#141413] tabular-nums">{totalPages}</strong>
+          </div>
+        )}
+
         {/* Sort selector dropdown */}
         <div className="flex items-center gap-1.5">
           <div className="relative">

@@ -112,6 +112,7 @@ export default function ProductTable({
           <tbody className="divide-y divide-[#f2f1ed] text-xs">
             {products.map((product) => (
               <tr
+                id={`product-row-${product.id}`}
                 key={product.id}
                 onClick={() => onViewProduct && onViewProduct(product.id)}
                 className="group hover:bg-[#faf9f5] transition-colors cursor-pointer"
@@ -223,6 +224,13 @@ export default function ProductTable({
                   <div className="flex items-center justify-end gap-1.5">
                     <Link
                       href={`/products/${product.id}`}
+                      onClick={() => {
+                        if (typeof window !== 'undefined') {
+                          sessionStorage.setItem('products_scroll_pos', window.scrollY.toString());
+                          sessionStorage.setItem('last_viewed_product_id', product.id.toString());
+                          sessionStorage.setItem('products_return_url', window.location.pathname + window.location.search);
+                        }
+                      }}
                       className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-2xs font-medium bg-[#f0eee9] hover:bg-[#141413] text-[#383733] hover:text-[#ffffff] border border-[#e2e0da] transition-all cursor-pointer shadow-2xs active:scale-95"
                       title="View product details"
                     >

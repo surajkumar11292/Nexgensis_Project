@@ -31,6 +31,8 @@ interface ProductStorageContextType {
   hasLocalChanges: boolean;
   catalogTotal: number;
   setCatalogTotal: (total: number) => void;
+  isAddModalOpen: boolean;
+  setIsAddModalOpen: (open: boolean) => void;
 }
 
 const ProductStorageContext = createContext<ProductStorageContextType | undefined>(undefined);
@@ -63,6 +65,7 @@ export function ProductStorageProvider({ children }: { children: React.ReactNode
     const initialStorage = readStorage();
     return Math.max(0, 194 + initialStorage.added.length - initialStorage.deleted.length);
   });
+  const [isAddModalOpen, setIsAddModalOpen] = useState<boolean>(false);
 
   const saveLocalAdd = useCallback((product: Product) => {
     setStorageState((prev) => {
@@ -228,6 +231,8 @@ export function ProductStorageProvider({ children }: { children: React.ReactNode
         hasLocalChanges,
         catalogTotal,
         setCatalogTotal,
+        isAddModalOpen,
+        setIsAddModalOpen,
       }}
     >
       {children}

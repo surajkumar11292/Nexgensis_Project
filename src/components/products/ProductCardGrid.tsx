@@ -23,6 +23,7 @@ export default function ProductCardGrid({
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
       {products.map((product) => (
         <article
+          id={`product-card-${product.id}`}
           key={product.id}
           onClick={() => onViewProduct && onViewProduct(product.id)}
           className="group relative p-4 bg-[#ffffff] rounded-2xl border border-[#e7e6e1] hover:border-[#141413]/40 transition-all duration-300 ease-out hover:-translate-y-0.5 hover:shadow-[0_12px_28px_rgba(0,0,0,0.06)] flex flex-col justify-between gap-3.5 cursor-pointer"
@@ -103,6 +104,13 @@ export default function ProductCardGrid({
               <div className="flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
                 <Link
                   href={`/products/${product.id}`}
+                  onClick={() => {
+                    if (typeof window !== 'undefined') {
+                      sessionStorage.setItem('products_scroll_pos', window.scrollY.toString());
+                      sessionStorage.setItem('last_viewed_product_id', product.id.toString());
+                      sessionStorage.setItem('products_return_url', window.location.pathname + window.location.search);
+                    }
+                  }}
                   className="inline-flex items-center p-1.5 rounded-full text-2xs font-medium bg-[#f2f1ed] hover:bg-[#141413] text-[#383733] hover:text-[#ffffff] transition-all cursor-pointer"
                   title="View product details"
                 >

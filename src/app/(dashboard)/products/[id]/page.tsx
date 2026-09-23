@@ -133,6 +133,15 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
     }
   };
 
+  const handleReturnToCatalog = () => {
+    if (typeof window !== 'undefined' && window.history.length > 1) {
+      router.back();
+    } else {
+      const returnUrl = typeof window !== 'undefined' ? sessionStorage.getItem('products_return_url') : null;
+      router.push(returnUrl || '/products');
+    }
+  };
+
   if (isLoading) {
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center gap-3 text-xs text-[#787771]">
@@ -154,13 +163,14 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
             The product with ID <span className="font-mono font-medium text-[#141413]">#{resolvedParams.id}</span> does not exist or has been removed from the inventory.
           </p>
         </div>
-        <Link
-          href="/products"
+        <button
+          type="button"
+          onClick={handleReturnToCatalog}
           className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-semibold bg-[#141413] text-white hover:bg-[#262624] transition-all cursor-pointer shadow-xs active:scale-95"
         >
           <ChevronLeft className="h-4 w-4" />
           <span>Return to Catalog</span>
-        </Link>
+        </button>
       </div>
     );
   }
@@ -177,13 +187,14 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
       {/* Top Header & Breadcrumbs */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-[#e7e6e1]">
         <div className="flex items-center gap-2 text-xs text-[#787771] flex-wrap">
-          <Link
-            href="/products"
-            className="inline-flex items-center gap-1 text-[#5a5954] hover:text-[#141413] transition-colors"
+          <button
+            type="button"
+            onClick={handleReturnToCatalog}
+            className="inline-flex items-center gap-1 text-[#5a5954] hover:text-[#141413] transition-colors cursor-pointer"
           >
             <ChevronLeft className="h-3.5 w-3.5" />
             <span>Catalog</span>
-          </Link>
+          </button>
           <span>/</span>
           <span className="capitalize">{product.category}</span>
           <span>/</span>
