@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState, useCallback, useMemo } from 'react';
 import { Product } from '@/types/product';
+import productService from '@/services/productService';
 
 const STORAGE_KEY = 'nexgensis_products_local_storage';
 
@@ -25,6 +26,7 @@ interface ProductStorageContextType {
     categoryFilter?: string,
     searchFilter?: string
   ) => { products: Product[]; total: number };
+  getProduct: (id: number) => Promise<Product | null>;
   resetToDefaults: () => void;
   hasLocalChanges: boolean;
 }
@@ -176,6 +178,32 @@ export function ProductStorageProvider({ children }: { children: React.ReactNode
     [storageState]
   );
 
+  const getProduct = useCallback(
+    async (id: number): Promise<Product | null> => {
+      // 1. If marked as deleted locally, treat as not found
+      if (storageState.deleted.includes(id)) {
+        return null;
+      }
+
+      // 2. If locally created product
+      const localProduct = storageState.added.find((p) => p.id === id);
+      if (localProduct) {
+        const override = storageState.updated[id];
+        return override ? { ...localProduct, ...override } : localProduct;
+      }
+
+      // 3. Otherwise fetch from server and apply any local modifications
+      try {
+        const serverProduct = await productService.getProductById(id);
+        const override = storageState.updated[id];
+        return override ? { ...serverProduct, ...override } : serverProduct;
+      } catch {
+        return null;
+      }
+    },
+    [storageState]
+  );
+
   return (
     <ProductStorageContext.Provider
       value={{
@@ -186,6 +214,7 @@ export function ProductStorageProvider({ children }: { children: React.ReactNode
         saveLocalUpdate,
         saveLocalDelete,
         applyLocalOverrides,
+        getProduct,
         resetToDefaults,
         hasLocalChanges,
       }}

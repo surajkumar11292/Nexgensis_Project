@@ -5,6 +5,9 @@ import { useRouter } from 'next/navigation';
 import { useUrlParams } from '@/hooks/useUrlParams';
 import { useProducts } from '@/hooks/useProducts';
 import { useProductStorage } from '@/context/ProductStorageContext';
+import { useToast } from '@/context/ToastContext';
+import productService from '@/services/productService';
+import { Product, ProductFormData } from '@/types/product';
 import SearchInput from '@/components/products/SearchInput';
 import ProductFilters from '@/components/products/ProductFilters';
 import ProductTable from '@/components/products/ProductTable';
@@ -13,16 +16,28 @@ import Pagination from '@/components/products/Pagination';
 import ProductSkeleton from '@/components/products/ProductSkeleton';
 import EmptyState from '@/components/products/EmptyState';
 import ErrorState from '@/components/products/ErrorState';
-import { RotateCcw, Sparkles, Loader2, X } from 'lucide-react';
+import ProductFormModal from '@/components/products/ProductFormModal';
+import ConfirmDeleteModal from '@/components/products/ConfirmDeleteModal';
+import { RotateCcw, Sparkles, Loader2, X, Plus } from 'lucide-react';
 
 function ProductsContent() {
   const router = useRouter();
   const { params, setPage, setLimit, setSearch, setCategory, setSort, clearFilters } =
     useUrlParams();
   const { products, total, isLoading, error, retry, isHybridFiltered } = useProducts(params);
-  const { hasLocalChanges, resetToDefaults } = useProductStorage();
+  const { hasLocalChanges, resetToDefaults, saveLocalAdd, saveLocalUpdate, saveLocalDelete } =
+    useProductStorage();
+  const { success, error: toastError } = useToast();
 
   const [desktopViewMode, setDesktopViewMode] = useState<'table' | 'cards'>('table');
+
+  // Modal States
+  const [isAddModalOpen, setIsAddModalOpen] = useState<boolean>(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [isDeleting, setIsDeleting] = useState<boolean>(false);
 
   const hasActiveFilters = Boolean(params.q || params.category || params.sortBy);
 
@@ -30,9 +45,100 @@ function ProductsContent() {
     router.push(`/products/${productId}`);
   };
 
+  const handleOpenEdit = (product: Product) => {
+    setSelectedProduct(product);
+    setIsEditModalOpen(true);
+  };
+
+  const handleOpenDelete = (product: Product) => {
+    setSelectedProduct(product);
+    setIsDeleteModalOpen(true);
+  };
+
+  // Add Product Handler
+  const handleAddSubmit = async (formData: ProductFormData) => {
+    setIsSubmitting(true);
+    try {
+      let createdProduct: Product;
+      try {
+        createdProduct = await productService.addProduct(formData);
+      } catch {
+        // Fallback for offline / network issues
+        createdProduct = {
+          ...formData,
+          id: Date.now(),
+          price: formData.price,
+          stock: formData.stock,
+          rating: formData.rating || 4.5,
+          thumbnail: formData.thumbnail || '',
+          images: formData.thumbnail ? [formData.thumbnail] : [],
+        } as Product;
+      }
+
+      const localItem: Product = {
+        ...createdProduct,
+        ...formData,
+        id: createdProduct.id || Date.now(),
+        isLocal: true,
+      };
+
+      saveLocalAdd(localItem);
+      success(`"${formData.title}" added to inventory.`);
+      setIsAddModalOpen(false);
+    } catch {
+      toastError('Failed to create product. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  // Edit Product Handler
+  const handleEditSubmit = async (formData: ProductFormData) => {
+    if (!selectedProduct) return;
+    setIsSubmitting(true);
+    try {
+      try {
+        await productService.updateProduct(selectedProduct.id, formData);
+      } catch {
+        // Handled optimistically
+      }
+
+      saveLocalUpdate(selectedProduct.id, formData);
+      success(`"${formData.title}" updated successfully.`);
+      setIsEditModalOpen(false);
+      setSelectedProduct(null);
+    } catch {
+      toastError('Failed to update product.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  // Delete Product Handler
+  const handleDeleteConfirm = async () => {
+    if (!selectedProduct) return;
+    setIsDeleting(true);
+    try {
+      try {
+        await productService.deleteProduct(selectedProduct.id);
+      } catch {
+        // Handled optimistically
+      }
+
+      saveLocalDelete(selectedProduct.id);
+      success(`"${selectedProduct.title}" has been deleted.`);
+      setIsDeleteModalOpen(false);
+      setSelectedProduct(null);
+    } catch {
+      toastError('Failed to delete product.');
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
   return (
     <div className="space-y-6">
-      {/* Catalog Header Banner (Swiss Bank / Impeccable Neo-Kinpaku vocabulary) */}
+      {/* Catalog Header Banner */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-5 pb-6 border-b border-[#e7e6e1]">
         <div className="space-y-2 max-w-xl">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#f2f1ed] border border-[#e5e4de] text-2xs font-medium text-[#5a5954]">
@@ -53,11 +159,21 @@ function ProductsContent() {
 
         {/* Global Action Controls */}
         <div className="flex items-center gap-2.5 shrink-0 flex-wrap">
+          {/* Add Product Button */}
+          <button
+            type="button"
+            onClick={() => setIsAddModalOpen(true)}
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-semibold bg-[#141413] hover:bg-[#262624] text-white transition-all cursor-pointer shadow-xs active:scale-95"
+          >
+            <Plus className="h-3.5 w-3.5" />
+            <span>Add Product</span>
+          </button>
+
           {hasLocalChanges && (
             <button
               type="button"
               onClick={resetToDefaults}
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-medium text-[#b45309] bg-[#fffbeb] hover:bg-[#fef3c7] border border-[#fde68a] transition-all cursor-pointer shadow-2xs active:scale-95"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full text-xs font-medium text-[#b45309] bg-[#fffbeb] hover:bg-[#fef3c7] border border-[#fde68a] transition-all cursor-pointer shadow-2xs active:scale-95"
             >
               <RotateCcw className="h-3 w-3" />
               <span>Reset Demo Changes</span>
@@ -68,7 +184,7 @@ function ProductsContent() {
             <button
               type="button"
               onClick={clearFilters}
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-medium text-[#5a5954] hover:text-[#141413] bg-[#f0eee9] hover:bg-[#e6e4de] border border-[#e2e0da] transition-all cursor-pointer active:scale-95"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full text-xs font-medium text-[#5a5954] hover:text-[#141413] bg-[#f0eee9] hover:bg-[#e6e4de] border border-[#e2e0da] transition-all cursor-pointer active:scale-95"
             >
               <X className="h-3 w-3" />
               <span>Clear filters</span>
@@ -138,15 +254,27 @@ function ProductsContent() {
                   order={params.order}
                   onSortChange={setSort}
                   onViewProduct={handleViewProduct}
+                  onEditProduct={handleOpenEdit}
+                  onDeleteProduct={handleOpenDelete}
                 />
               ) : (
-                <ProductCardGrid products={products} onViewProduct={handleViewProduct} />
+                <ProductCardGrid
+                  products={products}
+                  onViewProduct={handleViewProduct}
+                  onEditProduct={handleOpenEdit}
+                  onDeleteProduct={handleOpenDelete}
+                />
               )}
             </div>
 
             {/* Mobile View: Always Touch-Friendly Card Grid */}
             <div className="block md:hidden">
-              <ProductCardGrid products={products} onViewProduct={handleViewProduct} />
+              <ProductCardGrid
+                products={products}
+                onViewProduct={handleViewProduct}
+                onEditProduct={handleOpenEdit}
+                onDeleteProduct={handleOpenDelete}
+              />
             </div>
 
             {/* Custom Pagination with Result Count & Page Size Selector */}
@@ -160,6 +288,40 @@ function ProductsContent() {
           </div>
         )}
       </div>
+
+      {/* Add Product Modal */}
+      <ProductFormModal
+        isOpen={isAddModalOpen}
+        mode="add"
+        onClose={() => setIsAddModalOpen(false)}
+        onSubmit={handleAddSubmit}
+        isSubmitting={isSubmitting}
+      />
+
+      {/* Edit Product Modal */}
+      <ProductFormModal
+        isOpen={isEditModalOpen}
+        mode="edit"
+        initialProduct={selectedProduct}
+        onClose={() => {
+          setIsEditModalOpen(false);
+          setSelectedProduct(null);
+        }}
+        onSubmit={handleEditSubmit}
+        isSubmitting={isSubmitting}
+      />
+
+      {/* Delete Confirmation Modal */}
+      <ConfirmDeleteModal
+        isOpen={isDeleteModalOpen}
+        product={selectedProduct}
+        onClose={() => {
+          setIsDeleteModalOpen(false);
+          setSelectedProduct(null);
+        }}
+        onConfirm={handleDeleteConfirm}
+        isDeleting={isDeleting}
+      />
     </div>
   );
 }

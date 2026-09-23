@@ -4,14 +4,21 @@ import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Product } from '@/types/product';
-import { Star, Eye } from 'lucide-react';
+import { Star, Eye, Edit3, Trash2 } from 'lucide-react';
 
 interface ProductCardGridProps {
   products: Product[];
   onViewProduct?: (productId: number) => void;
+  onEditProduct?: (product: Product) => void;
+  onDeleteProduct?: (product: Product) => void;
 }
 
-export default function ProductCardGrid({ products, onViewProduct }: ProductCardGridProps) {
+export default function ProductCardGrid({
+  products,
+  onViewProduct,
+  onEditProduct,
+  onDeleteProduct,
+}: ProductCardGridProps) {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
       {products.map((product) => (
@@ -61,7 +68,7 @@ export default function ProductCardGrid({ products, onViewProduct }: ProductCard
             </div>
           </div>
 
-          {/* Card Bottom: Metrics + Quick Action */}
+          {/* Card Bottom: Metrics + Quick Actions */}
           <div className="pt-2.5 border-t border-[#f2f1ed] flex items-center justify-between gap-2">
             <div className="flex items-baseline gap-1.5">
               <span className="text-sm font-bold tabular-nums text-[#141413]">
@@ -74,7 +81,7 @@ export default function ProductCardGrid({ products, onViewProduct }: ProductCard
               ) : null}
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5">
               <div className="inline-flex items-center gap-1 text-2xs font-medium text-[#5a5954]">
                 <Star className="h-3 w-3 fill-[#d97706] text-[#d97706]" />
                 <span className="tabular-nums font-semibold">{product.rating.toFixed(1)}</span>
@@ -89,17 +96,42 @@ export default function ProductCardGrid({ products, onViewProduct }: ProductCard
                     : 'bg-[#fef2f2] text-[#991b1b] border border-[#fee2e2]'
                 }`}
               >
-                {product.stock > 0 ? `${product.stock} in stock` : 'Out of stock'}
+                {product.stock > 0 ? `${product.stock} in stock` : 'Out'}
               </span>
 
-              <Link
-                href={`/products/${product.id}`}
-                onClick={(e) => e.stopPropagation()}
-                className="inline-flex items-center gap-1 p-1.5 rounded-full text-2xs font-medium bg-[#f2f1ed] hover:bg-[#141413] text-[#5a5954] hover:text-[#ffffff] transition-all cursor-pointer"
-                title="View product details"
-              >
-                <Eye className="h-3 w-3" />
-              </Link>
+              <div className="flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
+                <Link
+                  href={`/products/${product.id}`}
+                  className="inline-flex items-center p-1.5 rounded-full text-2xs font-medium bg-[#f2f1ed] hover:bg-[#141413] text-[#5a5954] hover:text-[#ffffff] transition-all cursor-pointer"
+                  title="View product details"
+                >
+                  <Eye className="h-3 w-3" />
+                </Link>
+
+                {onEditProduct && (
+                  <button
+                    type="button"
+                    onClick={() => onEditProduct(product)}
+                    aria-label={`Edit ${product.title}`}
+                    className="inline-flex items-center p-1.5 rounded-full text-2xs font-medium bg-[#f2f1ed] hover:bg-[#141413] text-[#5a5954] hover:text-[#ffffff] transition-all cursor-pointer"
+                    title="Edit product"
+                  >
+                    <Edit3 className="h-3 w-3" />
+                  </button>
+                )}
+
+                {onDeleteProduct && (
+                  <button
+                    type="button"
+                    onClick={() => onDeleteProduct(product)}
+                    aria-label={`Delete ${product.title}`}
+                    className="inline-flex items-center p-1.5 rounded-full text-2xs font-medium bg-[#fff5f5] hover:bg-[#fee2e2] text-[#dc2626] transition-all cursor-pointer"
+                    title="Delete product"
+                  >
+                    <Trash2 className="h-3 w-3" />
+                  </button>
+                )}
+              </div>
             </div>
           </div>
         </div>

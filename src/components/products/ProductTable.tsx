@@ -4,7 +4,7 @@ import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Product, SortField, SortOrder } from '@/types/product';
-import { ArrowUp, ArrowDown, ArrowUpDown, Star, Eye } from 'lucide-react';
+import { ArrowUp, ArrowDown, ArrowUpDown, Star, Eye, Edit3, Trash2 } from 'lucide-react';
 
 interface ProductTableProps {
   products: Product[];
@@ -12,6 +12,8 @@ interface ProductTableProps {
   order?: SortOrder;
   onSortChange?: (field: SortField, order: SortOrder) => void;
   onViewProduct?: (productId: number) => void;
+  onEditProduct?: (product: Product) => void;
+  onDeleteProduct?: (product: Product) => void;
 }
 
 export default function ProductTable({
@@ -20,6 +22,8 @@ export default function ProductTable({
   order,
   onSortChange,
   onViewProduct,
+  onEditProduct,
+  onDeleteProduct,
 }: ProductTableProps) {
   const handleSortToggle = (field: SortField) => {
     if (!onSortChange) return;
@@ -224,6 +228,30 @@ export default function ProductTable({
                       <Eye className="h-3 w-3" />
                       <span>View</span>
                     </Link>
+
+                    {onEditProduct && (
+                      <button
+                        type="button"
+                        onClick={() => onEditProduct(product)}
+                        aria-label={`Edit ${product.title}`}
+                        className="inline-flex items-center p-1 rounded-full text-[#6e6d67] hover:text-[#141413] hover:bg-[#edebe6] border border-[#e2e0da] transition-all cursor-pointer shadow-2xs active:scale-95"
+                        title="Edit product"
+                      >
+                        <Edit3 className="h-3 w-3" />
+                      </button>
+                    )}
+
+                    {onDeleteProduct && (
+                      <button
+                        type="button"
+                        onClick={() => onDeleteProduct(product)}
+                        aria-label={`Delete ${product.title}`}
+                        className="inline-flex items-center p-1 rounded-full text-[#dc2626] hover:text-[#b91c1c] hover:bg-[#fee2e2] border border-[#fecaca] transition-all cursor-pointer shadow-2xs active:scale-95"
+                        title="Delete product"
+                      >
+                        <Trash2 className="h-3 w-3" />
+                      </button>
+                    )}
                   </div>
                 </td>
               </tr>
