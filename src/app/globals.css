@@ -6,7 +6,7 @@
   --surface: #ffffff;
   --border: #e7e6e1;
   --border-subtle: #f0eee9;
-  --ink-muted: #6e6d67;
+  --ink-muted: #5a5954;
   --kinpaku-gold: #d97706;
   --verdigris: #059669;
 }
@@ -20,8 +20,8 @@
   --color-muted: var(--ink-muted);
   --color-gold: var(--kinpaku-gold);
   --color-verdigris: var(--verdigris);
-  --font-sans: var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-mono: var(--font-geist-mono), monospace;
+  --font-sans: var(--font-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-heading: var(--font-heading), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
 body {
@@ -58,7 +58,7 @@ div[data-nextjs-dev-tools],
   display: none !important;
 }
 
-/* Smooth subtle scrollbar */
+/* Global sleek custom scrollbar without ugly browser arrows */
 ::-webkit-scrollbar {
   width: 5px;
   height: 5px;
@@ -75,4 +75,40 @@ div[data-nextjs-dev-tools],
 
 ::-webkit-scrollbar-thumb:hover {
   background: #b5b3aa;
+}
+
+::-webkit-scrollbar-button {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+/* Modal clean contained scrollbar */
+.modal-scroll {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.modal-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+
+.modal-scroll::-webkit-scrollbar-track {
+  background: transparent;
+  margin: 8px 0;
+}
+
+.modal-scroll::-webkit-scrollbar-thumb {
+  background: #dcdad4;
+  border-radius: 9999px;
+}
+
+.modal-scroll::-webkit-scrollbar-thumb:hover {
+  background: #a8a69d;
+}
+
+.modal-scroll::-webkit-scrollbar-button {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
 }

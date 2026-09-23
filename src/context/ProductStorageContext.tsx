@@ -29,6 +29,8 @@ interface ProductStorageContextType {
   getProduct: (id: number) => Promise<Product | null>;
   resetToDefaults: () => void;
   hasLocalChanges: boolean;
+  catalogTotal: number;
+  setCatalogTotal: (total: number) => void;
 }
 
 const ProductStorageContext = createContext<ProductStorageContextType | undefined>(undefined);
@@ -57,6 +59,10 @@ function writeStorage(state: LocalStorageState): void {
 
 export function ProductStorageProvider({ children }: { children: React.ReactNode }) {
   const [storageState, setStorageState] = useState<LocalStorageState>(() => readStorage());
+  const [catalogTotal, setCatalogTotal] = useState<number>(() => {
+    const initialStorage = readStorage();
+    return Math.max(0, 194 + initialStorage.added.length - initialStorage.deleted.length);
+  });
 
   const saveLocalAdd = useCallback((product: Product) => {
     setStorageState((prev) => {
@@ -65,6 +71,7 @@ export function ProductStorageProvider({ children }: { children: React.ReactNode
       writeStorage(nextState);
       return nextState;
     });
+    setCatalogTotal((prev) => prev + 1);
   }, []);
 
   const saveLocalUpdate = useCallback((id: number, partialProduct: Partial<Product>) => {
@@ -95,6 +102,7 @@ export function ProductStorageProvider({ children }: { children: React.ReactNode
       writeStorage(nextState);
       return nextState;
     });
+    setCatalogTotal((prev) => Math.max(0, prev - 1));
   }, []);
 
   const resetToDefaults = useCallback(() => {
@@ -103,6 +111,7 @@ export function ProductStorageProvider({ children }: { children: React.ReactNode
     if (typeof window !== 'undefined') {
       localStorage.removeItem(STORAGE_KEY);
     }
+    setCatalogTotal(194);
   }, []);
 
   const hasLocalChanges = useMemo(() => {
@@ -217,6 +226,8 @@ export function ProductStorageProvider({ children }: { children: React.ReactNode
         getProduct,
         resetToDefaults,
         hasLocalChanges,
+        catalogTotal,
+        setCatalogTotal,
       }}
     >
       {children}

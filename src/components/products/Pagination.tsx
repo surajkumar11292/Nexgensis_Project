@@ -42,19 +42,30 @@ export default function Pagination({
   const pages = getPageNumbers();
 
   return (
-    <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-[#e7e6e1] text-xs text-[#6e6d67]">
+    <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-[#e7e6e1] text-xs text-[#383733]">
       {/* Result Count Summary */}
       <div className="flex items-center gap-2">
-        <span className="tabular-nums">
-          Showing <strong className="text-[#141413] font-semibold">{startItem}–{endItem}</strong> of{' '}
-          <strong className="text-[#141413] font-semibold">{total}</strong> products
+        <span className="tabular-nums font-normal text-[#383733]">
+          {total === 0 ? (
+            'No products to display'
+          ) : startItem === endItem ? (
+            <>
+              Showing <strong className="text-[#141413] font-semibold">{startItem}</strong> of{' '}
+              <strong className="text-[#141413] font-semibold">{total}</strong> {total === 1 ? 'product' : 'products'}
+            </>
+          ) : (
+            <>
+              Showing <strong className="text-[#141413] font-semibold">{startItem}–{endItem}</strong> of{' '}
+              <strong className="text-[#141413] font-semibold">{total}</strong> products
+            </>
+          )}
         </span>
       </div>
 
       {/* Pagination Controls & Page Size Selector */}
       <div className="flex items-center gap-3 flex-wrap justify-center">
-        {/* Page Size Selector */}
-        <div className="flex items-center gap-1.5 text-2xs text-[#787771]">
+        {/* Page Size Selector with High Contrast */}
+        <div className="flex items-center gap-1.5 text-2xs font-medium text-[#383733]">
           <span>Per page:</span>
           <select
             value={limit}
@@ -89,7 +100,7 @@ export default function Pagination({
                 return (
                   <span
                     key={`ellipsis-${idx}`}
-                    className="h-7 w-7 flex items-center justify-center text-xs text-[#8e8d86] select-none"
+                    className="h-7 w-7 flex items-center justify-center text-xs text-[#5a5954] select-none"
                   >
                     …
                   </span>
@@ -108,7 +119,7 @@ export default function Pagination({
                   className={`h-7 min-w-7 px-2 flex items-center justify-center rounded-full text-xs font-medium tabular-nums transition-all cursor-pointer ${
                     isCurrent
                       ? 'bg-[#141413] text-[#ffffff] shadow-xs'
-                      : 'text-[#5a5954] hover:text-[#141413] hover:bg-[#ffffff]'
+                      : 'text-[#383733] hover:text-[#141413] hover:bg-[#ffffff]'
                   }`}
                 >
                   {pageNum}

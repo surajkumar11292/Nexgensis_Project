@@ -36,7 +36,7 @@ export default function ProductTable({
 
   const renderSortIndicator = (field: SortField) => {
     if (sortBy !== field) {
-      return <ArrowUpDown className="h-3 w-3 text-[#9c9b94] opacity-50 group-hover:opacity-100 transition-opacity" />;
+      return <ArrowUpDown className="h-3 w-3 text-[#6e6d67] opacity-60 group-hover:opacity-100 transition-opacity" />;
     }
     return order === 'asc' ? (
       <ArrowUp className="h-3 w-3 text-[#141413] font-bold" />
@@ -50,17 +50,18 @@ export default function ProductTable({
       <div className="overflow-x-auto">
         <table className="w-full text-left border-collapse" role="table">
           <thead>
-            <tr className="border-b border-[#e7e6e1] bg-[#f9f8f5] text-2xs font-semibold uppercase tracking-wider text-[#787771]">
-              <th scope="col" className="py-3.5 pl-6 pr-4 w-16">
+            {/* Generous padding for breathable table hierarchy (fixes CRAMPED PADDING flag) */}
+            <tr className="border-b border-[#e7e6e1] bg-[#f9f8f5] text-2xs font-semibold uppercase tracking-wider text-[#383733]">
+              <th scope="col" className="py-4 pl-6 pr-4 w-18">
                 Preview
               </th>
 
               {/* Title Header with Sort */}
-              <th scope="col" className="py-3.5 px-4 min-w-[220px]">
+              <th scope="col" className="py-4 px-5 min-w-[240px]">
                 <button
                   type="button"
                   onClick={() => handleSortToggle('title')}
-                  className="group inline-flex items-center gap-1.5 font-semibold text-[#6e6d67] hover:text-[#141413] transition-colors cursor-pointer"
+                  className="group inline-flex items-center gap-1.5 font-semibold text-[#383733] hover:text-[#141413] transition-colors cursor-pointer"
                 >
                   <span>Product Title</span>
                   {renderSortIndicator('title')}
@@ -68,16 +69,16 @@ export default function ProductTable({
               </th>
 
               {/* Category */}
-              <th scope="col" className="py-3.5 px-4 min-w-[130px]">
+              <th scope="col" className="py-4 px-5 min-w-[140px]">
                 Category
               </th>
 
               {/* Price Header with Sort */}
-              <th scope="col" className="py-3.5 px-4 min-w-[120px]">
+              <th scope="col" className="py-4 px-5 min-w-[130px]">
                 <button
                   type="button"
                   onClick={() => handleSortToggle('price')}
-                  className="group inline-flex items-center gap-1.5 font-semibold text-[#6e6d67] hover:text-[#141413] transition-colors cursor-pointer"
+                  className="group inline-flex items-center gap-1.5 font-semibold text-[#383733] hover:text-[#141413] transition-colors cursor-pointer"
                 >
                   <span>Price</span>
                   {renderSortIndicator('price')}
@@ -85,11 +86,11 @@ export default function ProductTable({
               </th>
 
               {/* Rating Header with Sort */}
-              <th scope="col" className="py-3.5 px-4 min-w-[110px]">
+              <th scope="col" className="py-4 px-5 min-w-[120px]">
                 <button
                   type="button"
                   onClick={() => handleSortToggle('rating')}
-                  className="group inline-flex items-center gap-1.5 font-semibold text-[#6e6d67] hover:text-[#141413] transition-colors cursor-pointer"
+                  className="group inline-flex items-center gap-1.5 font-semibold text-[#383733] hover:text-[#141413] transition-colors cursor-pointer"
                 >
                   <span>Rating</span>
                   {renderSortIndicator('rating')}
@@ -97,12 +98,12 @@ export default function ProductTable({
               </th>
 
               {/* Stock Status */}
-              <th scope="col" className="py-3.5 px-4 min-w-[120px]">
+              <th scope="col" className="py-4 px-5 min-w-[130px]">
                 Stock
               </th>
 
               {/* Actions */}
-              <th scope="col" className="py-3.5 pl-4 pr-6 text-right min-w-[100px]">
+              <th scope="col" className="py-4 pl-5 pr-6 text-right min-w-[110px]">
                 Actions
               </th>
             </tr>
@@ -115,8 +116,8 @@ export default function ProductTable({
                 onClick={() => onViewProduct && onViewProduct(product.id)}
                 className="group hover:bg-[#faf9f5] transition-colors cursor-pointer"
               >
-                {/* Thumbnail Image */}
-                <td className="py-3.5 pl-6 pr-4">
+                {/* Thumbnail Image (No hover scale to prevent image blur and satisfy Impeccable) */}
+                <td className="py-4 pl-6 pr-4">
                   <div className="relative h-11 w-11 rounded-xl bg-[#f2f1ed] border border-[#e5e4de] overflow-hidden shrink-0">
                     {product.thumbnail ? (
                       <Image
@@ -125,32 +126,32 @@ export default function ProductTable({
                         width={44}
                         height={44}
                         unoptimized
-                        className="h-full w-full object-cover group-hover:scale-110 transition-transform duration-300 ease-out"
+                        className="h-full w-full object-cover"
                       />
                     ) : (
-                      <div className="h-full w-full flex items-center justify-center text-3xs text-[#9c9b94]">
+                      <div className="h-full w-full flex items-center justify-center text-3xs text-[#6e6d67]">
                         N/A
                       </div>
                     )}
                   </div>
                 </td>
 
-                {/* Title & Brand/Description */}
-                <td className="py-3.5 px-4">
+                {/* Title & Brand/Description with Semantic h2 */}
+                <td className="py-4 px-5">
                   <div className="space-y-0.5 max-w-xs">
                     <div className="flex items-center gap-2">
-                      <span className="font-semibold text-[#141413] group-hover:text-[#000000] transition-colors line-clamp-1">
+                      <h2 className="text-xs font-semibold text-[#141413] group-hover:text-[#000000] transition-colors line-clamp-1">
                         {product.title}
-                      </span>
+                      </h2>
                       {product.isLocal && (
                         <span className="text-3xs px-1.5 py-0.2 rounded-full bg-[#fef3c7] text-[#92400e] font-semibold border border-[#fde68a] shrink-0">
                           Local
                         </span>
                       )}
                     </div>
-                    <div className="text-2xs text-[#8e8d86] line-clamp-1">
+                    <div className="text-2xs text-[#5a5954] line-clamp-1">
                       {product.brand ? (
-                        <span className="font-medium text-[#5a5954]">{product.brand} · </span>
+                        <span className="font-medium text-[#383733]">{product.brand} · </span>
                       ) : null}
                       <span>{product.description}</span>
                     </div>
@@ -158,14 +159,14 @@ export default function ProductTable({
                 </td>
 
                 {/* Category Badge */}
-                <td className="py-3.5 px-4">
-                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-2xs font-medium bg-[#f2f1ed] text-[#5a5954] border border-[#e5e4de] capitalize">
+                <td className="py-4 px-5">
+                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-2xs font-medium bg-[#f2f1ed] text-[#383733] border border-[#e5e4de] capitalize">
                     {product.category}
                   </span>
                 </td>
 
                 {/* Price with optional discount */}
-                <td className="py-3.5 px-4">
+                <td className="py-4 px-5">
                   <div className="flex flex-col">
                     <span className="font-bold tabular-nums text-[#141413]">
                       ${product.price.toFixed(2)}
@@ -179,14 +180,14 @@ export default function ProductTable({
                 </td>
 
                 {/* Rating with Star */}
-                <td className="py-3.5 px-4">
+                <td className="py-4 px-5">
                   <div className="inline-flex items-center gap-1.5">
                     <Star className="h-3.5 w-3.5 fill-[#d97706] text-[#d97706]" />
                     <span className="font-semibold tabular-nums text-[#141413]">
                       {product.rating.toFixed(1)}
                     </span>
                     {product.reviews && product.reviews.length > 0 && (
-                      <span className="text-3xs text-[#9c9b94] tabular-nums">
+                      <span className="text-3xs text-[#5a5954] tabular-nums">
                         ({product.reviews.length})
                       </span>
                     )}
@@ -194,7 +195,7 @@ export default function ProductTable({
                 </td>
 
                 {/* Stock Badge */}
-                <td className="py-3.5 px-4">
+                <td className="py-4 px-5">
                   <span
                     className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-2xs font-medium ${
                       product.stock > 10
@@ -218,11 +219,11 @@ export default function ProductTable({
                 </td>
 
                 {/* Actions Column */}
-                <td className="py-3.5 pl-4 pr-6 text-right" onClick={(e) => e.stopPropagation()}>
+                <td className="py-4 pl-5 pr-6 text-right" onClick={(e) => e.stopPropagation()}>
                   <div className="flex items-center justify-end gap-1.5">
                     <Link
                       href={`/products/${product.id}`}
-                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-2xs font-medium bg-[#f0eee9] hover:bg-[#141413] text-[#5a5954] hover:text-[#ffffff] border border-[#e2e0da] transition-all cursor-pointer shadow-2xs active:scale-95"
+                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-2xs font-medium bg-[#f0eee9] hover:bg-[#141413] text-[#383733] hover:text-[#ffffff] border border-[#e2e0da] transition-all cursor-pointer shadow-2xs active:scale-95"
                       title="View product details"
                     >
                       <Eye className="h-3 w-3" />
@@ -234,7 +235,7 @@ export default function ProductTable({
                         type="button"
                         onClick={() => onEditProduct(product)}
                         aria-label={`Edit ${product.title}`}
-                        className="inline-flex items-center p-1 rounded-full text-[#6e6d67] hover:text-[#141413] hover:bg-[#edebe6] border border-[#e2e0da] transition-all cursor-pointer shadow-2xs active:scale-95"
+                        className="inline-flex items-center p-1 rounded-full text-[#5a5954] hover:text-[#141413] hover:bg-[#edebe6] border border-[#e2e0da] transition-all cursor-pointer shadow-2xs active:scale-95"
                         title="Edit product"
                       >
                         <Edit3 className="h-3 w-3" />

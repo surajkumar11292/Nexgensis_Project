@@ -1,8 +1,7 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Search, X } from 'lucide-react';
-import { useDebounce } from '@/hooks/useDebounce';
 
 interface SearchInputProps {
   initialValue?: string;
@@ -13,30 +12,52 @@ interface SearchInputProps {
 export default function SearchInput({
   initialValue = '',
   onSearchChange,
-  placeholder = 'Search products by title or keyword...',
+  placeholder = 'Search products by title, brand, or keywords...',
 }: SearchInputProps) {
   const [searchTerm, setSearchTerm] = useState(initialValue);
   const [prevInitialValue, setPrevInitialValue] = useState(initialValue);
-  const debouncedSearch = useDebounce(searchTerm, 400);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Synchronize internal state with external URL updates using official React pattern
-  // (adjusting state during render without synchronous useEffect setState)
+  // Sync internal state when external initialValue changes (e.g. from Clear Filters or URL navigation)
+  // Official React pattern for adjusting state from props during render without synchronous useEffect setState
   if (initialValue !== prevInitialValue) {
     setPrevInitialValue(initialValue);
     setSearchTerm(initialValue);
   }
 
-  // Dispatch debounced search query only when it actually differs from external prop
-  useEffect(() => {
-    if (debouncedSearch !== initialValue) {
-      onSearchChange(debouncedSearch);
-    }
-  }, [debouncedSearch, initialValue, onSearchChange]);
+  // Handle typing with 400ms debounce
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value;
+    setSearchTerm(val);
 
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+    }
+
+    timerRef.current = setTimeout(() => {
+      onSearchChange(val.trim());
+    }, 400);
+  };
+
+  // Immediate clear on X click: cancels timer, clears local state, and immediately clears URL
   const handleClear = () => {
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+      timerRef.current = null;
+    }
     setSearchTerm('');
+    setPrevInitialValue('');
     onSearchChange('');
   };
+
+  // Clean up timer on unmount
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+      }
+    };
+  }, []);
 
   return (
     <div className="relative flex-1 max-w-md">
@@ -46,10 +67,10 @@ export default function SearchInput({
       <input
         type="text"
         value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
+        onChange={handleChange}
         placeholder={placeholder}
         aria-label="Search products"
-        className="w-full pl-9 pr-8 py-2 rounded-full text-xs bg-[#ffffff] text-[#141413] placeholder:text-[#9c9b94] border border-[#e2e0da] focus:outline-none focus:ring-1 focus:ring-[#141413] focus:border-[#141413] transition-colors shadow-2xs"
+        className="w-full pl-9 pr-9 py-2 rounded-full text-xs bg-[#ffffff] text-[#141413] placeholder:text-[#9c9b94] border border-[#e2e0da] focus:outline-none focus:ring-1 focus:ring-[#141413] focus:border-[#141413] transition-colors shadow-2xs"
       />
       {searchTerm && (
         <button

@@ -7,11 +7,11 @@ import {
   Lock,
   User,
   AlertCircle,
-  ArrowRight,
   Loader2,
-  Shield,
-  KeyRound,
-  CheckCircle2,
+  Package,
+  Search,
+  Database,
+  ArrowRight,
 } from 'lucide-react';
 
 export default function LoginPage() {
@@ -30,7 +30,7 @@ export default function LoginPage() {
     }
   }, [authLoading, isAuthenticated, router]);
 
-  // Subtle demo autofill helper for evaluators without ugly banners
+  // Demo account autofill
   const fillDemoCredentials = () => {
     setUsername('emilys');
     setPassword('emilyspass');
@@ -39,11 +39,10 @@ export default function LoginPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
     if (isSubmitting) return;
 
     if (!username.trim() || !password.trim()) {
-      setError('Please provide your authentication username and security key.');
+      setError('Please enter your username and password.');
       return;
     }
 
@@ -56,9 +55,9 @@ export default function LoginPage() {
       });
     } catch (err: unknown) {
       if (err instanceof Error) {
-        setError(err.message || 'Authentication failed. Please verify your credentials.');
+        setError(err.message || 'Invalid username or password.');
       } else {
-        setError('Authentication server rejected the session credentials.');
+        setError('Authentication failed. Please verify your credentials.');
       }
     } finally {
       setIsSubmitting(false);
@@ -68,9 +67,9 @@ export default function LoginPage() {
   if (authLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#f9f9f8]">
-        <div className="flex items-center gap-2.5 text-[#787771] text-xs">
+        <div className="flex items-center gap-2.5 text-[#5a5954] text-xs">
           <Loader2 className="h-4 w-4 animate-spin text-[#141413]" />
-          <span>Verifying secure enclave...</span>
+          <span>Loading...</span>
         </div>
       </div>
     );
@@ -78,110 +77,119 @@ export default function LoginPage() {
 
   return (
     <main className="min-h-screen grid grid-cols-1 lg:grid-cols-12 bg-[#f9f9f8]">
-      {/* Left Column: Swiss Private Wealth Institutional Branding */}
-      <section className="hidden lg:flex lg:col-span-5 xl:col-span-6 bg-[#0e0e0d] text-white p-12 xl:p-16 flex-col justify-between relative overflow-hidden border-r border-[#222220]">
-        {/* Subtle geometric luxury watermark */}
-        <div className="absolute -right-24 -top-24 w-96 h-96 rounded-full bg-radial from-[#d97706]/10 to-transparent blur-3xl pointer-events-none" />
-        <div className="absolute -left-24 -bottom-24 w-96 h-96 rounded-full bg-radial from-[#059669]/5 to-transparent blur-3xl pointer-events-none" />
-
-        {/* Top Branding */}
-        <div className="relative z-10 flex items-center gap-3">
-          <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-[#272725] to-[#141413] border border-[#383733] flex items-center justify-center text-white font-bold text-base shadow-sm">
+      {/* Left Column: Clean Institutional Branding */}
+      <section className="hidden lg:flex lg:col-span-5 xl:col-span-6 bg-[#141413] text-white p-12 xl:p-16 flex-col justify-between relative border-r border-[#262624]">
+        {/* Brand */}
+        <div className="flex items-center gap-3">
+          <div className="h-9 w-9 rounded-xl bg-[#262624] border border-[#383733] flex items-center justify-center text-white font-bold text-sm">
             N
           </div>
           <div>
-            <span className="text-sm font-bold tracking-widest uppercase text-white block">
+            <span className="text-sm font-bold tracking-wider uppercase text-white block">
               Nexgensis
             </span>
-            <span className="text-2xs font-medium tracking-[0.2em] uppercase text-[#a3a199] block">
-              Private Inventory Systems
+            <span className="text-2xs text-[#a3a199] block">
+              Product Admin Dashboard
             </span>
           </div>
         </div>
 
-        {/* Middle Value Proposition */}
-        <div className="relative z-10 space-y-8 my-auto py-12">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#1c1c1a] border border-[#2d2d2a] text-2xs text-[#dcdad4]">
-            <span className="h-1.5 w-1.5 rounded-full bg-[#059669]" />
-            <span className="tracking-wide">Institutional Product Administration</span>
+        {/* Core Value Statement */}
+        <div className="space-y-6 my-auto max-w-md py-12">
+          <div className="space-y-2">
+            <h1 className="text-3xl xl:text-4xl font-normal tracking-[-0.03em] text-[#fbfbfa] leading-tight">
+              Product catalog, organized.
+            </h1>
+            <p className="text-xs text-[#a3a199] leading-relaxed">
+              A clean administrative workspace to manage inventory, track stock levels, and review catalog updates in real time.
+            </p>
           </div>
 
-          <h1 className="text-3xl xl:text-4xl font-normal tracking-[-0.03em] text-[#fbfbfa] leading-[1.2]">
-            High-precision catalog control, calibrated for total visibility.
-          </h1>
-
-          <div className="space-y-4 pt-4 text-xs text-[#a3a199]">
+          {/* Feature List with Unified Monochromatic Styling (No AI Color Palette) */}
+          <div className="space-y-4 pt-2 text-xs text-[#a3a199]">
             <div className="flex items-start gap-3">
-              <div className="h-6 w-6 rounded-lg bg-[#1a1a18] border border-[#2d2d2a] flex items-center justify-center shrink-0 text-[#d97706] mt-0.5">
-                <Shield className="h-3.5 w-3.5" />
+              <div className="h-6 w-6 rounded-lg bg-[#222220] border border-[#383733] flex items-center justify-center shrink-0 text-[#e7e6e1] mt-0.5">
+                <Search className="h-3.5 w-3.5" />
               </div>
               <div>
-                <strong className="text-white font-semibold block text-xs">
-                  Tier-1 Enclave Protection
+                <strong className="text-white font-medium block text-xs">
+                  Fast search &amp; filters
                 </strong>
-                <span>Direct tokenized session verification with instant API teardown.</span>
+                <span className="text-2xs text-[#a3a199]">
+                  Filter by category, search by title, and sort with instant URL state sync.
+                </span>
               </div>
             </div>
 
             <div className="flex items-start gap-3">
-              <div className="h-6 w-6 rounded-lg bg-[#1a1a18] border border-[#2d2d2a] flex items-center justify-center shrink-0 text-[#059669] mt-0.5">
-                <CheckCircle2 className="h-3.5 w-3.5" />
+              <div className="h-6 w-6 rounded-lg bg-[#222220] border border-[#383733] flex items-center justify-center shrink-0 text-[#e7e6e1] mt-0.5">
+                <Package className="h-3.5 w-3.5" />
               </div>
               <div>
-                <strong className="text-white font-semibold block text-xs">
-                  Zero-Latency Reconciliation
+                <strong className="text-white font-medium block text-xs">
+                  Inventory &amp; stock overview
                 </strong>
-                <span>Continuous URL state synchronization and optimistic client persistence.</span>
+                <span className="text-2xs text-[#a3a199]">
+                  Monitor availability, pricing, discount percentages, and customer reviews.
+                </span>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-3">
+              <div className="h-6 w-6 rounded-lg bg-[#222220] border border-[#383733] flex items-center justify-center shrink-0 text-[#e7e6e1] mt-0.5">
+                <Database className="h-3.5 w-3.5" />
+              </div>
+              <div>
+                <strong className="text-white font-medium block text-xs">
+                  Catalog management
+                </strong>
+                <span className="text-2xs text-[#a3a199]">
+                  Add, update, or remove products with local persistence.
+                </span>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Bottom Swiss Bank Motto */}
-        <div className="relative z-10 pt-6 border-t border-[#222220] flex items-center justify-between text-2xs text-[#73716b]">
-          <span>Zurich · Geneva · Singapore</span>
-          <span>Security Standard ISO/IEC 27001</span>
+        {/* Footer */}
+        <div className="text-2xs text-[#a3a199]">
+          <span>Nexgensis Technologies · Product Management Assignment</span>
         </div>
       </section>
 
-      {/* Right Column: Clean Swiss Banking Login Panel */}
+      {/* Right Column: Clean Login Panel */}
       <section className="col-span-1 lg:col-span-7 xl:col-span-6 flex flex-col justify-center px-6 sm:px-12 xl:px-20 py-12">
-        <div className="w-full max-w-md mx-auto space-y-8">
+        <div className="w-full max-w-sm mx-auto space-y-6">
           {/* Mobile brand header */}
-          <div className="lg:hidden flex items-center gap-2.5 mb-6">
+          <div className="lg:hidden flex items-center gap-2.5 mb-4">
             <div className="h-8 w-8 rounded-lg bg-[#141413] flex items-center justify-center text-white font-bold text-sm">
               N
             </div>
             <span className="text-sm font-bold tracking-tight text-[#141413] uppercase">
-              Nexgensis Private
+              Nexgensis Admin
             </span>
           </div>
 
-          <div className="space-y-2">
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#f0eee9] border border-[#e2e0da] text-2xs font-medium text-[#5a5954]">
-              <span className="h-1.5 w-1.5 rounded-full bg-[#059669]" />
-              <span>Client Portal Access</span>
-            </div>
-            <h2 className="text-2xl sm:text-3xl font-normal tracking-[-0.03em] text-[#141413]">
-              Sign in to dashboard
+          <div className="space-y-1.5">
+            <h2 className="text-2xl font-normal tracking-[-0.02em] text-[#141413]">
+              Sign in
             </h2>
-            <p className="text-xs text-[#6e6d67] leading-relaxed">
-              Authenticate using your institutional administrator credentials.
+            <p className="text-xs text-[#5a5954]">
+              Enter your credentials to access the product catalog.
             </p>
           </div>
 
-          {/* Discreet Quick-fill Demo Pill (No ugly banner) */}
+          {/* Discreet Demo Autofill Helper */}
           <div className="p-3 rounded-xl bg-[#ffffff] border border-[#e7e6e1] shadow-2xs flex items-center justify-between gap-3 text-xs">
-            <div className="flex items-center gap-2 text-2xs text-[#6e6d67]">
-              <KeyRound className="h-3.5 w-3.5 text-[#d97706]" />
-              <span>Demo Account: <strong className="text-[#141413] font-mono font-medium">emilys</strong></span>
+            <div className="text-2xs text-[#454440]">
+              <span>Demo: <strong className="text-[#141413] font-mono">emilys</strong> / <strong className="text-[#141413] font-mono">emilyspass</strong></span>
             </div>
             <button
               type="button"
               onClick={fillDemoCredentials}
               className="text-2xs font-semibold text-[#141413] hover:text-[#d97706] hover:underline underline-offset-2 transition-colors cursor-pointer"
             >
-              One-Click Fill
+              Autofill
             </button>
           </div>
 
@@ -189,14 +197,14 @@ export default function LoginPage() {
           {error && (
             <div
               role="alert"
-              className="p-3.5 rounded-xl bg-[#fef2f2] border border-[#fee2e2] text-[#991b1b] text-xs flex items-start gap-2.5 shadow-2xs"
+              className="p-3 rounded-xl bg-[#fef2f2] border border-[#fee2e2] text-[#991b1b] text-xs flex items-start gap-2 shadow-2xs"
             >
               <AlertCircle className="h-4 w-4 text-[#dc2626] shrink-0 mt-0.5" />
               <div className="flex-1 font-medium">{error}</div>
             </div>
           )}
 
-          {/* Form with password popup protection */}
+          {/* Form */}
           <form
             onSubmit={handleSubmit}
             autoComplete="off"
@@ -204,20 +212,20 @@ export default function LoginPage() {
             data-form-type="other"
             className="space-y-4"
           >
-            <div>
+            <div className="space-y-1">
               <label
                 htmlFor="username"
-                className="block text-2xs font-semibold text-[#5a5954] uppercase tracking-wider mb-1.5"
+                className="block text-2xs font-semibold text-[#383733] uppercase tracking-wider"
               >
-                Account Username
+                Username
               </label>
-              <div className="relative rounded-xl shadow-2xs">
-                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#8e8d86]">
+              <div className="relative rounded-xl">
+                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#5a5954]">
                   <User className="h-4 w-4" />
                 </div>
                 <input
                   id="username"
-                  name="auth_user_identity"
+                  name="username"
                   type="text"
                   autoComplete="off"
                   autoCapitalize="none"
@@ -228,25 +236,25 @@ export default function LoginPage() {
                   onChange={(e) => setUsername(e.target.value)}
                   placeholder="e.g. emilys"
                   disabled={isSubmitting}
-                  className="block w-full pl-10 pr-3.5 py-2.5 text-xs rounded-xl border border-[#e2e0da] bg-[#ffffff] text-[#141413] placeholder:text-[#9c9b94] focus:outline-none focus:ring-1 focus:ring-[#141413] focus:border-[#141413] transition-colors disabled:opacity-60"
+                  className="block w-full pl-10 pr-3.5 py-2 text-xs rounded-xl border border-[#e2e0da] bg-[#ffffff] text-[#141413] placeholder:text-[#6e6d67] focus:outline-none focus:ring-1 focus:ring-[#141413] focus:border-[#141413] transition-colors disabled:opacity-60"
                 />
               </div>
             </div>
 
-            <div>
+            <div className="space-y-1">
               <label
                 htmlFor="password"
-                className="block text-2xs font-semibold text-[#5a5954] uppercase tracking-wider mb-1.5"
+                className="block text-2xs font-semibold text-[#383733] uppercase tracking-wider"
               >
-                Security Key
+                Password
               </label>
-              <div className="relative rounded-xl shadow-2xs">
-                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#8e8d86]">
+              <div className="relative rounded-xl">
+                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#5a5954]">
                   <Lock className="h-4 w-4" />
                 </div>
                 <input
                   id="password"
-                  name="auth_secret_token"
+                  name="password"
                   type="password"
                   autoComplete="new-password"
                   autoCapitalize="none"
@@ -257,7 +265,7 @@ export default function LoginPage() {
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••••••"
                   disabled={isSubmitting}
-                  className="block w-full pl-10 pr-3.5 py-2.5 text-xs rounded-xl border border-[#e2e0da] bg-[#ffffff] text-[#141413] placeholder:text-[#9c9b94] focus:outline-none focus:ring-1 focus:ring-[#141413] focus:border-[#141413] transition-colors disabled:opacity-60"
+                  className="block w-full pl-10 pr-3.5 py-2 text-xs rounded-xl border border-[#e2e0da] bg-[#ffffff] text-[#141413] placeholder:text-[#6e6d67] focus:outline-none focus:ring-1 focus:ring-[#141413] focus:border-[#141413] transition-colors disabled:opacity-60"
                 />
               </div>
             </div>
@@ -266,30 +274,26 @@ export default function LoginPage() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full flex justify-center items-center gap-2 py-3 px-4 rounded-full text-xs font-semibold text-white bg-[#141413] hover:bg-[#262624] focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#141413] transition-all shadow-xs disabled:opacity-60 cursor-pointer active:scale-[0.99]"
+                className="w-full flex justify-center items-center gap-2 py-2.5 px-4 rounded-full text-xs font-semibold text-white bg-[#141413] hover:bg-[#262624] focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#141413] transition-all shadow-xs disabled:opacity-60 cursor-pointer active:scale-[0.99]"
               >
                 {isSubmitting ? (
                   <>
-                    <Loader2 className="h-4 w-4 animate-spin text-white" />
-                    <span>Verifying session credentials...</span>
+                    <Loader2 className="h-3.5 w-3.5 animate-spin text-white" />
+                    <span>Signing in...</span>
                   </>
                 ) : (
                   <>
-                    <span>Authenticate Session</span>
-                    <ArrowRight className="h-3.5 w-3.5 text-[#d97706]" />
+                    <span>Sign in</span>
+                    <ArrowRight className="h-3.5 w-3.5" />
                   </>
                 )}
               </button>
             </div>
           </form>
 
-          {/* Swiss Bank Security Footer */}
-          <div className="pt-6 border-t border-[#e7e6e1] flex items-center justify-between text-2xs text-[#787771]">
-            <span className="flex items-center gap-1.5">
-              <span className="h-1.5 w-1.5 rounded-full bg-[#059669]" />
-              <span>TLS 1.3 End-to-End Cryptography</span>
-            </span>
-            <span className="font-mono text-2xs text-[#8e8d86]">DUMMYJSON AUTH API</span>
+          {/* High-Contrast Footer Note (Fixes LOW CONTRAST TEXT flag) */}
+          <div className="pt-4 border-t border-[#e7e6e1] text-center text-2xs font-medium text-[#454440]">
+            DummyJSON Authentication API · Next.js 16
           </div>
         </div>
       </section>

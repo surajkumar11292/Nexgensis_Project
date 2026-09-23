@@ -1,6 +1,6 @@
 'use client';
 
-import React, { Suspense, useState } from 'react';
+import React, { Suspense, useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useUrlParams } from '@/hooks/useUrlParams';
 import { useProducts } from '@/hooks/useProducts';
@@ -18,16 +18,22 @@ import EmptyState from '@/components/products/EmptyState';
 import ErrorState from '@/components/products/ErrorState';
 import ProductFormModal from '@/components/products/ProductFormModal';
 import ConfirmDeleteModal from '@/components/products/ConfirmDeleteModal';
-import { RotateCcw, Sparkles, Loader2, X, Plus } from 'lucide-react';
+import { RotateCcw, Sparkles, Loader2, Plus } from 'lucide-react';
 
 function ProductsContent() {
   const router = useRouter();
   const { params, setPage, setLimit, setSearch, setCategory, setSort, clearFilters } =
     useUrlParams();
   const { products, total, isLoading, error, retry, isHybridFiltered } = useProducts(params);
-  const { hasLocalChanges, resetToDefaults, saveLocalAdd, saveLocalUpdate, saveLocalDelete } =
+  const { hasLocalChanges, resetToDefaults, saveLocalAdd, saveLocalUpdate, saveLocalDelete, setCatalogTotal } =
     useProductStorage();
   const { success, error: toastError } = useToast();
+
+  useEffect(() => {
+    if (!params.q && !params.category && total > 0) {
+      setCatalogTotal(total);
+    }
+  }, [total, params.q, params.category, setCatalogTotal]);
 
   const [desktopViewMode, setDesktopViewMode] = useState<'table' | 'cards'>('table');
 
@@ -137,62 +143,7 @@ function ProductsContent() {
   };
 
   return (
-    <div className="space-y-6">
-      {/* Catalog Header Banner */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-5 pb-6 border-b border-[#e7e6e1]">
-        <div className="space-y-2 max-w-xl">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#f2f1ed] border border-[#e5e4de] text-2xs font-medium text-[#5a5954]">
-            <span className="h-1.5 w-1.5 rounded-full bg-[#059669]" />
-            <span>Catalog &amp; Inventory</span>
-            <span className="text-[#8e8d86]">·</span>
-            <span className="font-semibold text-[#141413] tabular-nums">{total} Products</span>
-          </div>
-
-          <h1 className="text-3xl sm:text-4xl font-normal tracking-[-0.03em] text-[#141413] leading-tight">
-            Manage product inventory with craft.
-          </h1>
-
-          <p className="text-xs sm:text-sm text-[#6e6d67] leading-relaxed">
-            Curated overview of items, stock status, ratings, and live prices synchronized with DummyJSON.
-          </p>
-        </div>
-
-        {/* Global Action Controls */}
-        <div className="flex items-center gap-2.5 shrink-0 flex-wrap">
-          {/* Add Product Button */}
-          <button
-            type="button"
-            onClick={() => setIsAddModalOpen(true)}
-            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-semibold bg-[#141413] hover:bg-[#262624] text-white transition-all cursor-pointer shadow-xs active:scale-95"
-          >
-            <Plus className="h-3.5 w-3.5" />
-            <span>Add Product</span>
-          </button>
-
-          {hasLocalChanges && (
-            <button
-              type="button"
-              onClick={resetToDefaults}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full text-xs font-medium text-[#b45309] bg-[#fffbeb] hover:bg-[#fef3c7] border border-[#fde68a] transition-all cursor-pointer shadow-2xs active:scale-95"
-            >
-              <RotateCcw className="h-3 w-3" />
-              <span>Reset Demo Changes</span>
-            </button>
-          )}
-
-          {hasActiveFilters && (
-            <button
-              type="button"
-              onClick={clearFilters}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full text-xs font-medium text-[#5a5954] hover:text-[#141413] bg-[#f0eee9] hover:bg-[#e6e4de] border border-[#e2e0da] transition-all cursor-pointer active:scale-95"
-            >
-              <X className="h-3 w-3" />
-              <span>Clear filters</span>
-            </button>
-          )}
-        </div>
-      </div>
-
+    <div className="space-y-4">
       {/* Hybrid Filter Warning Notice */}
       {isHybridFiltered && (
         <div className="p-3.5 rounded-2xl bg-[#fffbf2] border border-[#f5e6c8] text-[#8a5b14] text-xs flex items-start gap-3 shadow-2xs">
@@ -205,7 +156,7 @@ function ProductsContent() {
 
       {/* Control Strip: Search & Filters */}
       <div className="p-3 sm:p-4 rounded-2xl bg-[#f2f1ed] border border-[#e5e4de] space-y-3.5 shadow-2xs">
-        {/* Search Bar Row */}
+        {/* Search Bar Row with Add Product on Left of Page Indicator */}
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
           <SearchInput
             initialValue={params.q || ''}
@@ -213,11 +164,37 @@ function ProductsContent() {
             placeholder="Search catalog by title, brand, or keywords..."
           />
 
-          <div className="text-2xs text-[#787771] sm:text-right">
-            Page <span className="font-semibold text-[#141413] tabular-nums">{params.page}</span> of{' '}
-            <span className="font-semibold text-[#141413] tabular-nums">
-              {Math.max(1, Math.ceil(total / params.limit))}
-            </span>
+          {/* Right Controls: Reset Demo, Add Product (left of page indicator), and Page indicator */}
+          <div className="flex items-center justify-between sm:justify-end gap-3 shrink-0">
+            {hasLocalChanges && (
+              <button
+                type="button"
+                onClick={resetToDefaults}
+                title="Reset demo changes"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium text-[#b45309] bg-[#fffbeb] hover:bg-[#fef3c7] border border-[#fde68a] transition-all cursor-pointer shadow-2xs active:scale-95"
+              >
+                <RotateCcw className="h-3 w-3" />
+                <span className="hidden sm:inline">Reset Demo</span>
+              </button>
+            )}
+
+            {/* Add Product Button (positioned left of Page indicator) */}
+            <button
+              type="button"
+              onClick={() => setIsAddModalOpen(true)}
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-[#141413] hover:bg-[#262624] text-white transition-all cursor-pointer shadow-xs active:scale-95 shrink-0"
+            >
+              <Plus className="h-3.5 w-3.5" />
+              <span>Add Product</span>
+            </button>
+
+            {/* High-contrast page indicator */}
+            <div className="text-2xs sm:text-xs font-medium text-[#383733] shrink-0">
+              Page <span className="font-semibold text-[#141413] tabular-nums">{params.page}</span> of{' '}
+              <span className="font-semibold text-[#141413] tabular-nums">
+                {Math.max(1, Math.ceil(total / params.limit))}
+              </span>
+            </div>
           </div>
         </div>
 
