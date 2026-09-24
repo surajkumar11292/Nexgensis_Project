@@ -47,7 +47,7 @@ export function useUrlParams() {
     const rawOrder = searchParams.get('order');
     const order: SortOrder = rawOrder === 'desc' ? 'desc' : 'asc';
 
-    // Optional delay for race condition testing (?delay=2000)
+    // Optional network delay parameter
     const rawDelay = searchParams.get('delay');
     const delay = rawDelay ? parseInt(rawDelay, 10) : undefined;
 
@@ -142,7 +142,7 @@ export function useUrlParams() {
 
   const setSearch = useCallback(
     (q: string) => {
-      updateUrl({ q }, true); // Reset to page 1 on search change per PDF
+      updateUrl({ q }, true); // Reset to page 1 on search change
     },
     [updateUrl]
   );

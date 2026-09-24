@@ -126,7 +126,7 @@ export function ProductStorageProvider({ children }: { children: React.ReactNode
   }, [storageState]);
 
   /**
-   * Seamlessly merges server-fetched products with optimistic client-side mutations.
+   * Merges server-fetched products with optimistic client-side mutations.
    */
   const applyLocalOverrides = useCallback(
     (

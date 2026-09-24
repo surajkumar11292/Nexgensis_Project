@@ -123,7 +123,7 @@ export default function ProductFilters({
 
       {/* Sort, View Mode, and Clear Filters */}
       <div className="flex items-center gap-2 sm:gap-2.5 flex-wrap justify-between lg:justify-end">
-        {/* Page Indicator (on left side of Sort) */}
+        {/* Page Indicator */}
         {typeof currentPage === 'number' && typeof totalPages === 'number' && (
           <div className="text-2xs sm:text-xs font-medium text-[#5a5954] shrink-0 mr-1">
             Page <strong className="font-semibold text-[#141413] tabular-nums">{currentPage}</strong> of{' '}

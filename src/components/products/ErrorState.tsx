@@ -18,7 +18,7 @@ export default function ErrorState({ message, onRetry }: ErrorStateProps) {
           Failed to load product data
         </h3>
         <p className="text-xs text-[#7f1d1d] leading-relaxed">
-          {message || 'An unexpected network error occurred while communicating with DummyJSON API.'}
+          {message || 'An unexpected network error occurred while loading products.'}
         </p>
       </div>
 

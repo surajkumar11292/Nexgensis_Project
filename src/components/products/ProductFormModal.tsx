@@ -170,7 +170,7 @@ function ProductFormDialog({
           </button>
         </div>
 
-        {/* Scrollable Form Body - Cleanly contained with zero scrollbar leakage */}
+        {/* Form Body */}
         <form
           id="product-form"
           onSubmit={handleSubmit}

@@ -42,7 +42,7 @@ export interface Product {
   meta?: ProductMeta;
   images?: string[];
   thumbnail: string;
-  // Flag indicating optimistic locally added product
+  // Locally added product indicator
   isLocal?: boolean;
 }
 
@@ -69,7 +69,7 @@ export interface ProductFilterParams {
   category?: string;
   sortBy?: SortField;
   order?: SortOrder;
-  delay?: number; // Support for testing &delay=2000 per PDF
+  delay?: number; // Optional simulated network delay
 }
 
 export interface ProductFormData {

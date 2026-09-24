@@ -18,8 +18,8 @@ const plusJakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: 'Nexgensis | Product Admin Dashboard',
-  description: 'Crafted enterprise product management dashboard with Impeccable design system.',
+  title: 'Product Admin Dashboard',
+  description: 'Product admin dashboard for inventory management, catalog search, filtering, and updates.',
 };
 
 export default function RootLayout({

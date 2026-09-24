@@ -129,7 +129,7 @@ export default function LoginPage() {
                   Catalog management
                 </strong>
                 <span className="text-2xs sm:text-xs text-[#a3a199] leading-relaxed block">
-                  Add, update, or remove products seamlessly in your catalog.
+                  Add, update, or remove products directly in your catalog.
                 </span>
               </div>
             </div>
@@ -247,7 +247,7 @@ export default function LoginPage() {
             </div>
           </form>
 
-          {/* Discreet Demo Autofill Helper with Blue CTA */}
+          {/* Demo credentials helper */}
           <div className="p-3 rounded-xl bg-[#ffffff] border border-[#e7e6e1] shadow-2xs flex items-center justify-between gap-3 text-xs">
             <div className="text-2xs text-[#454440]">
               <span>Demo: <strong className="text-[#141413] font-mono">emilys</strong> / <strong className="text-[#141413] font-mono">emilyspass</strong></span>

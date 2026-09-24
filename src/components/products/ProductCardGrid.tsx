@@ -59,7 +59,7 @@ export default function ProductCardGrid({
                 )}
               </div>
 
-              {/* Semantic h2 tag (Fixes SKIPPED HEADING LEVEL flag) */}
+              {/* Product Title */}
               <h2 className="text-sm font-semibold text-[#141413] truncate group-hover:text-[#000000] transition-colors">
                 {product.title}
               </h2>

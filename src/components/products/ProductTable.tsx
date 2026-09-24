@@ -50,7 +50,7 @@ export default function ProductTable({
       <div className="overflow-x-auto">
         <table className="w-full text-left border-collapse" role="table">
           <thead>
-            {/* Generous padding for breathable table hierarchy (fixes CRAMPED PADDING flag) */}
+            {/* Table Header */}
             <tr className="border-b border-[#e7e6e1] bg-[#f9f8f5] text-2xs font-semibold uppercase tracking-wider text-[#383733]">
               <th scope="col" className="py-4 pl-6 pr-4 w-18">
                 Preview
@@ -117,7 +117,7 @@ export default function ProductTable({
                 onClick={() => onViewProduct && onViewProduct(product.id)}
                 className="group hover:bg-[#faf9f5] transition-colors cursor-pointer"
               >
-                {/* Thumbnail Image (No hover scale to prevent image blur and satisfy Impeccable) */}
+                {/* Thumbnail Image */}
                 <td className="py-4 pl-6 pr-4">
                   <div className="relative h-11 w-11 rounded-xl bg-[#f2f1ed] border border-[#e5e4de] overflow-hidden shrink-0">
                     {product.thumbnail ? (
@@ -137,7 +137,7 @@ export default function ProductTable({
                   </div>
                 </td>
 
-                {/* Title & Brand/Description with Semantic h2 */}
+                {/* Title & Description */}
                 <td className="py-4 px-5">
                   <div className="space-y-0.5 max-w-xs">
                     <div className="flex items-center gap-2">

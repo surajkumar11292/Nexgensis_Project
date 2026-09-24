@@ -23,7 +23,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     router.push('/login');
   }, [router]);
 
-  // Hydrate session strictly on client mount via startTransition to eliminate React Hydration Mismatch
+  // Hydrate session on client mount
   useEffect(() => {
     const { user: storedUser, token: storedToken } = authService.getStoredAuth();
     startTransition(() => {

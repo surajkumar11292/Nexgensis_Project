@@ -48,7 +48,7 @@ export default function Header() {
     <header className="sticky top-0 z-30 w-full bg-[#f9f9f8]/95 backdrop-blur-sm border-b border-[#e7e6e1]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between gap-3 sm:gap-4 h-[4.5rem]">
-          {/* Products Title & Catalog Count (stacked vertically) */}
+          {/* Brand & Catalog Count */}
           <Link
             href="/products"
             className="flex flex-col justify-center shrink-0 group focus:outline-none focus-visible:ring-2 focus-visible:ring-[#141413] rounded-lg cursor-pointer"
@@ -61,7 +61,7 @@ export default function Header() {
             </span>
           </Link>
 
-          {/* Search bar on right of Products, then Add Product on right of Search */}
+          {/* Search & Quick Actions */}
           <div className="flex items-center gap-2 sm:gap-2.5 flex-1 max-w-xl mx-2">
             <Suspense fallback={<div className="flex-1 h-9 rounded-full bg-[#f2f1ed] animate-pulse" />}>
               <HeaderSearch />
@@ -90,8 +90,8 @@ export default function Header() {
             </button>
           </div>
 
-          {/* User first name + (admin) & Red Logout button */}
-          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+          {/* User Profile & Logout */}
+          <div className="flex items-center gap-2 sm:gap-2.5 shrink-0">
             {user && (
               <div className="flex items-center gap-1.5 sm:gap-2 py-1.5 px-3 sm:px-4 rounded-full bg-[#ffffff] border border-[#e7e6e1] shadow-2xs">
                 <span className="font-semibold text-xs sm:text-sm text-[#141413]">

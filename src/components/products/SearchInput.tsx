@@ -96,7 +96,7 @@ export default function SearchInput({
           </button>
         )}
 
-        {/* Clean search icon button: no background fill, no border, just the icon */}
+        {/* Search button */}
         <button
           type="submit"
           title="Search"

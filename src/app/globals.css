@@ -58,7 +58,7 @@ div[data-nextjs-dev-tools],
   display: none !important;
 }
 
-/* Global sleek custom scrollbar without ugly browser arrows */
+/* Custom scrollbar styling */
 ::-webkit-scrollbar {
   width: 5px;
   height: 5px;
@@ -83,7 +83,7 @@ div[data-nextjs-dev-tools],
   height: 0 !important;
 }
 
-/* Modal clean contained scrollbar */
+/* Modal scrollbar */
 .modal-scroll {
   overflow-y: auto;
   overscroll-behavior: contain;

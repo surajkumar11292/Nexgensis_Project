@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 
 /**
  * Custom hook to debounce a fast-changing value (e.g. search input).
- * Strictly written from scratch per assignment rules (no external utility libraries).
  *
  * @param value The value to debounce
  * @param delay Milliseconds to wait after user stops changing value

@@ -40,7 +40,7 @@ export default function DashboardLayout({
     return null;
   }
 
-  // Only show main header on catalog view; hide top section after entering product detail
+  // Show header on catalog page, hide on product detail view
   const isProductDetailPage = pathname.startsWith('/products/') && pathname !== '/products';
 
   return (

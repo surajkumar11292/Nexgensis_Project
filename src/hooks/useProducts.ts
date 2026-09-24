@@ -17,11 +17,10 @@ interface UseProductsResult {
 
 /**
  * Custom hook to fetch and manage products with:
- * 1. AbortController request cancellation to guarantee fast typing never lets stale responses overwrite fresh ones.
- * 2. Monotonic request ID guarding against race conditions (tested with &delay=2000).
- * 3. Graceful hybrid filtering when both search query and category filter are active.
- * 4. Local optimistic persistence merging via useProductStorage.
- * 5. Strict adherence to no-React-Query / no-SWR constraint.
+ * - AbortController request cancellation for search queries
+ * - Monotonic request ID tracking to prevent race conditions
+ * - Hybrid client/server filtering when search and category are combined
+ * - Optimistic local state persistence via useProductStorage
  */
 export function useProducts(params: ProductFilterParams): UseProductsResult {
   const [products, setProducts] = useState<Product[]>([]);

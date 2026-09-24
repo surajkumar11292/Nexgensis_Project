@@ -3,7 +3,7 @@ import React from 'react';
 export default function ProductSkeleton({ viewMode = 'all' }: { viewMode?: 'all' | 'table' | 'cards' }) {
   return (
     <div className="space-y-4 animate-pulse">
-      {/* Table Skeleton (Desktop) */}
+      {/* Table Skeleton */}
       {(viewMode === 'all' || viewMode === 'table') && (
         <div className="hidden md:block bg-[#ffffff] rounded-2xl border border-[#e7e6e1] overflow-hidden shadow-2xs">
           <div className="h-12 bg-[#f2f1ed] border-b border-[#e7e6e1]" />
@@ -26,7 +26,7 @@ export default function ProductSkeleton({ viewMode = 'all' }: { viewMode?: 'all'
         </div>
       )}
 
-      {/* Cards Skeleton (Mobile) */}
+      {/* Cards Skeleton */}
       {(viewMode === 'all' || viewMode === 'cards') && (
         <div className="md:hidden grid grid-cols-1 sm:grid-cols-2 gap-4">
           {Array.from({ length: 6 }).map((_, i) => (

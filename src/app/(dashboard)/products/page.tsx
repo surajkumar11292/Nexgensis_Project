@@ -200,7 +200,7 @@ function ProductsContent() {
         </div>
       )}
 
-      {/* Compact Filter Strip: Categories (Left) & Page Indicator + Sort + View Mode (Right) */}
+      {/* Filter bar */}
       <div className="p-2 sm:p-2.5 rounded-2xl bg-[#f2f1ed] border border-[#e5e4de] shadow-2xs">
         <ProductFilters
           selectedCategory={params.category || ''}
@@ -217,7 +217,7 @@ function ProductsContent() {
         />
       </div>
 
-      {/* Main Content Area with State Management */}
+      {/* Product list */}
       <div>
         {isLoading ? (
           <ProductSkeleton viewMode="all" />
@@ -259,7 +259,7 @@ function ProductsContent() {
               />
             </div>
 
-            {/* Custom Pagination with Result Count & Page Size Selector */}
+            {/* Pagination */}
             <Pagination
               currentPage={params.page}
               total={total}

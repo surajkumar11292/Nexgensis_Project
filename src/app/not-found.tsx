@@ -18,7 +18,7 @@ export default function NotFound() {
             Page Not Found
           </h1>
           <p className="text-xs text-[#787771] leading-relaxed">
-            The page you are looking for does not exist or has been relocated within the institutional portal.
+            The page you are looking for does not exist or has been moved.
           </p>
         </div>
 

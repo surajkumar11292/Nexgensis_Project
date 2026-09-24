@@ -6,7 +6,7 @@ export const AUTH_UNAUTHORIZED_EVENT = 'auth:unauthorized';
 
 /**
  * Shared Axios client configured with base URL, authentication interceptor,
- * and centralized error handling per assignment specifications.
+ * and centralized error handling.
  */
 export const apiClient = axios.create({
   baseURL: 'https://dummyjson.com',

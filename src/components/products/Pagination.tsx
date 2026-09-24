@@ -64,7 +64,7 @@ export default function Pagination({
 
       {/* Pagination Controls & Page Size Selector */}
       <div className="flex items-center gap-3 flex-wrap justify-center">
-        {/* Page Size Selector with High Contrast */}
+        {/* Page Size Selector */}
         <div className="flex items-center gap-1.5 text-2xs font-medium text-[#383733]">
           <span>Per page:</span>
           <select
