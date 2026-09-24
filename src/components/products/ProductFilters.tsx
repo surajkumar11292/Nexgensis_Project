@@ -102,8 +102,8 @@ export default function ProductFilters({
           })}
         </div>
 
-        {/* All Categories Dropdown */}
-        <div className="relative">
+        {/* All Categories Dropdown - Hidden on phone screens, visible on laptop screens */}
+        <div className="relative hidden sm:block">
           <select
             value={selectedCategory}
             onChange={(e) => onCategoryChange(e.target.value)}
@@ -122,17 +122,17 @@ export default function ProductFilters({
       </div>
 
       {/* Sort, View Mode, and Clear Filters */}
-      <div className="flex items-center gap-2 sm:gap-2.5 flex-wrap justify-between lg:justify-end">
-        {/* Page Indicator */}
+      <div className="flex items-center gap-2 sm:gap-2.5 flex-wrap justify-between lg:justify-end w-full lg:w-auto">
+        {/* Page Indicator - Right-aligned on phone, left-aligned on laptop */}
         {typeof currentPage === 'number' && typeof totalPages === 'number' && (
-          <div className="text-2xs sm:text-xs font-medium text-[#5a5954] shrink-0 mr-1">
+          <div className="text-2xs sm:text-xs font-medium text-[#5a5954] shrink-0 order-3 ml-auto text-right sm:order-1 sm:ml-0 sm:mr-1 sm:text-left">
             Page <strong className="font-semibold text-[#141413] tabular-nums">{currentPage}</strong> of{' '}
             <strong className="font-semibold text-[#141413] tabular-nums">{totalPages}</strong>
           </div>
         )}
 
         {/* Sort selector dropdown */}
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-center gap-1.5 order-1 sm:order-2">
           <div className="relative">
             <select
               value={currentSortKey}
@@ -153,7 +153,7 @@ export default function ProductFilters({
 
         {/* View mode toggle (Table / Grid) for desktop */}
         {onViewModeChange && (
-          <div className="hidden md:inline-flex items-center p-0.5 rounded-full bg-[#f2f1ed] border border-[#e2e0da]">
+          <div className="hidden md:inline-flex items-center p-0.5 rounded-full bg-[#f2f1ed] border border-[#e2e0da] sm:order-3">
             <button
               type="button"
               onClick={() => onViewModeChange('table')}
@@ -188,7 +188,7 @@ export default function ProductFilters({
           <button
             type="button"
             onClick={onClearFilters}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium text-[#5a5954] hover:text-[#141413] bg-[#f0eee9] hover:bg-[#e6e4de] border border-[#e2e0da] transition-all cursor-pointer active:scale-95"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium text-[#5a5954] hover:text-[#141413] bg-[#f0eee9] hover:bg-[#e6e4de] border border-[#e2e0da] transition-all cursor-pointer active:scale-95 order-2 sm:order-4"
           >
             <X className="h-3 w-3" />
             <span>Clear filters</span>

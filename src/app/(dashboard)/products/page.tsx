@@ -1,6 +1,6 @@
 'use client';
 
-import React, { Suspense, useState, useEffect } from 'react';
+import React, { Suspense, useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { useUrlParams } from '@/hooks/useUrlParams';
 import { useProducts } from '@/hooks/useProducts';
@@ -76,6 +76,53 @@ function ProductsContent() {
       }
     }
   }, [isLoading, products]);
+
+  const pageChangePendingScrollRef = useRef<boolean>(false);
+  const prevPageRef = useRef<number>(params.page);
+
+  const scrollToTop = (behavior: ScrollBehavior = 'smooth') => {
+    if (typeof window !== 'undefined') {
+      try {
+        window.scrollTo({ top: 0, behavior });
+      } catch {
+        window.scrollTo(0, 0);
+      }
+      if (behavior === 'instant') {
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
+      }
+    }
+  };
+
+  const handlePageChange = (newPage: number) => {
+    if (newPage === params.page) return;
+    pageChangePendingScrollRef.current = true;
+    setPage(newPage);
+    scrollToTop('smooth');
+  };
+
+  const handleLimitChange = (newLimit: number) => {
+    pageChangePendingScrollRef.current = true;
+    setLimit(newLimit);
+    scrollToTop('smooth');
+  };
+
+  // Scroll to top whenever page number changes
+  useEffect(() => {
+    if (prevPageRef.current !== params.page) {
+      prevPageRef.current = params.page;
+      pageChangePendingScrollRef.current = true;
+      scrollToTop('smooth');
+    }
+  }, [params.page]);
+
+  // Once new page products finish loading, guarantee viewport displays from top
+  useEffect(() => {
+    if (!isLoading && pageChangePendingScrollRef.current) {
+      pageChangePendingScrollRef.current = false;
+      scrollToTop('instant');
+    }
+  }, [isLoading]);
 
   const [desktopViewMode, setDesktopViewMode] = useState<'table' | 'cards'>('table');
 
@@ -228,7 +275,7 @@ function ProductsContent() {
         ) : (
           <div className="space-y-6">
             {/* Desktop View: Table or Card Grid */}
-            <div className="hidden md:block">
+            <div className="hidden md:block w-full overflow-hidden">
               {desktopViewMode === 'table' ? (
                 <ProductTable
                   products={products}
@@ -250,7 +297,7 @@ function ProductsContent() {
             </div>
 
             {/* Mobile View: Always Touch-Friendly Card Grid */}
-            <div className="block md:hidden">
+            <div className="block md:hidden w-full overflow-hidden">
               <ProductCardGrid
                 products={products}
                 onViewProduct={handleViewProduct}
@@ -264,8 +311,8 @@ function ProductsContent() {
               currentPage={params.page}
               total={total}
               limit={params.limit}
-              onPageChange={setPage}
-              onLimitChange={setLimit}
+              onPageChange={handlePageChange}
+              onLimitChange={handleLimitChange}
             />
           </div>
         )}

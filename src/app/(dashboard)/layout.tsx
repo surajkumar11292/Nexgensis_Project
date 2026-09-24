@@ -44,10 +44,10 @@ export default function DashboardLayout({
   const isProductDetailPage = pathname.startsWith('/products/') && pathname !== '/products';
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#f9f9f8]">
+    <div className="min-h-screen flex flex-col bg-[#f9f9f8] w-full max-w-full overflow-x-hidden">
       {!isProductDetailPage && <Header />}
       <main
-        className={`flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8 ${
+        className={`flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8 overflow-x-hidden ${
           isProductDetailPage ? 'pt-6 sm:pt-8' : 'pt-2.5'
         }`}
       >

@@ -71,8 +71,8 @@ export default function ProductCardGrid({
           </div>
 
           {/* Card Bottom: Metrics + Quick Actions */}
-          <div className="pt-2.5 border-t border-[#f2f1ed] flex items-center justify-between gap-2">
-            <div className="flex items-baseline gap-1.5">
+          <div className="pt-2.5 border-t border-[#f2f1ed] flex items-center justify-between gap-1.5 sm:gap-2">
+            <div className="flex items-baseline gap-1 sm:gap-1.5 shrink-0">
               <span className="text-sm font-bold tabular-nums text-[#141413]">
                 ${product.price.toFixed(2)}
               </span>
@@ -83,14 +83,14 @@ export default function ProductCardGrid({
               ) : null}
             </div>
 
-            <div className="flex items-center gap-1.5">
-              <div className="inline-flex items-center gap-1 text-2xs font-medium text-[#383733]">
+            <div className="flex items-center gap-1 sm:gap-1.5 shrink-0">
+              <div className="inline-flex items-center gap-0.5 sm:gap-1 text-2xs font-medium text-[#383733]">
                 <Star className="h-3 w-3 fill-[#d97706] text-[#d97706]" />
                 <span className="tabular-nums font-semibold">{product.rating.toFixed(1)}</span>
               </div>
 
               <span
-                className={`text-3xs px-2 py-0.5 rounded-full font-medium ${
+                className={`text-3xs px-1.5 sm:px-2 py-0.5 rounded-full font-medium shrink-0 ${
                   product.stock > 10
                     ? 'bg-[#edf7f2] text-[#0d6e49] border border-[#d2edd9]'
                     : product.stock > 0
@@ -101,7 +101,7 @@ export default function ProductCardGrid({
                 {product.stock > 0 ? `${product.stock} in stock` : 'Out'}
               </span>
 
-              <div className="flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
+              <div className="flex items-center gap-1 shrink-0" onClick={(e) => e.stopPropagation()}>
                 <Link
                   href={`/products/${product.id}`}
                   onClick={() => {

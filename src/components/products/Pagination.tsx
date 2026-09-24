@@ -89,8 +89,8 @@ export default function Pagination({
             aria-label="Go to previous page"
             className="inline-flex items-center justify-center h-7 px-2.5 rounded-full text-xs font-medium text-[#141413] hover:bg-[#ffffff] disabled:opacity-40 disabled:hover:bg-transparent disabled:cursor-not-allowed transition-all cursor-pointer active:scale-95"
           >
-            <ChevronLeft className="h-3.5 w-3.5 mr-0.5" />
-            <span className="hidden xs:inline">Prev</span>
+            <ChevronLeft className="h-3.5 w-3.5 sm:mr-0.5" />
+            <span className="hidden sm:inline">Prev</span>
           </button>
 
           {/* Numeric Page Buttons */}
@@ -100,7 +100,7 @@ export default function Pagination({
                 return (
                   <span
                     key={`ellipsis-${idx}`}
-                    className="h-7 w-7 flex items-center justify-center text-xs text-[#5a5954] select-none"
+                    className="h-7 w-6 sm:w-7 flex items-center justify-center text-xs text-[#5a5954] select-none"
                   >
                     …
                   </span>
@@ -116,7 +116,7 @@ export default function Pagination({
                   type="button"
                   onClick={() => onPageChange(pageNum)}
                   aria-current={isCurrent ? 'page' : undefined}
-                  className={`h-7 min-w-7 px-2 flex items-center justify-center rounded-full text-xs font-medium tabular-nums transition-all cursor-pointer ${
+                  className={`h-7 min-w-6 sm:min-w-7 px-1.5 sm:px-2 flex items-center justify-center rounded-full text-xs font-medium tabular-nums transition-all cursor-pointer ${
                     isCurrent
                       ? 'bg-[#141413] text-[#ffffff] shadow-xs'
                       : 'text-[#383733] hover:text-[#141413] hover:bg-[#ffffff]'
@@ -136,8 +136,8 @@ export default function Pagination({
             aria-label="Go to next page"
             className="inline-flex items-center justify-center h-7 px-2.5 rounded-full text-xs font-medium text-[#141413] hover:bg-[#ffffff] disabled:opacity-40 disabled:hover:bg-transparent disabled:cursor-not-allowed transition-all cursor-pointer active:scale-95"
           >
-            <span className="hidden xs:inline">Next</span>
-            <ChevronRight className="h-3.5 w-3.5 ml-0.5" />
+            <span className="hidden sm:inline">Next</span>
+            <ChevronRight className="h-3.5 w-3.5 sm:ml-0.5" />
           </button>
         </nav>
       </div>
