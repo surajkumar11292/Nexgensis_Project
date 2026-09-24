@@ -72,12 +72,12 @@ export default function ProductCardGrid({
 
           {/* Card Bottom: Metrics + Quick Actions */}
           <div className="pt-2.5 border-t border-[#f2f1ed] flex items-center justify-between gap-1.5 sm:gap-2">
-            <div className="flex items-baseline gap-1 sm:gap-1.5 shrink-0">
+            <div className="flex items-center gap-1 sm:gap-1.5 shrink-0">
               <span className="text-sm font-bold tabular-nums text-[#141413]">
                 ${product.price.toFixed(2)}
               </span>
               {product.discountPercentage && product.discountPercentage > 0 ? (
-                <span className="text-3xs text-[#059669] font-medium bg-[#edf7f2] px-1.5 py-0.5 rounded">
+                <span className="text-3xs text-[#059669] font-medium bg-[#edf7f2] px-1.5 py-0.5 rounded leading-none">
                   -{Math.round(product.discountPercentage)}%
                 </span>
               ) : null}
@@ -90,7 +90,7 @@ export default function ProductCardGrid({
               </div>
 
               <span
-                className={`text-3xs px-1.5 sm:px-2 py-0.5 rounded-full font-medium shrink-0 ${
+                className={`text-3xs px-1.5 sm:px-2 py-0.5 rounded-full font-medium shrink-0 leading-none ${
                   product.stock > 10
                     ? 'bg-[#edf7f2] text-[#0d6e49] border border-[#d2edd9]'
                     : product.stock > 0
